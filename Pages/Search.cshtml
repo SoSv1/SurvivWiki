@@ -1,0 +1,43 @@
+﻿@page
+@model SurviveWiki.Pages.SearchModel
+@{
+    ViewData["Title"] = "Search Results";
+}
+
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <h2 class="mb-4">Search Results</h2>
+
+            <form method="get" class="d-flex gap-2 mb-4">
+                <input type="text" asp-for="Query" class="form-control form-control-lg" placeholder="Search..." autofocus />
+                <button type="submit" class="btn btn-primary btn-lg">Search</button>
+            </form>
+
+            @if (Model.HasSearched)
+            {
+                if (Model.SearchResults.Any())
+                {
+                    <div class="list-group">
+                        @foreach (var item in Model.SearchResults)
+                        {
+                            <a asp-page="/Item" asp-route-name="@item.Name" class="list-group-item list-group-item-action">
+                                <div class="d-flex w-100 justify-content-between">
+                                    <h5 class="mb-1 text-primary">@item.Name</h5>
+                                    <small>@item.Category</small>
+                                </div>
+                                <p class="mb-1 text-muted">@item.Description</p>
+                            </a>
+                        }
+                    </div>
+                }
+                else
+                {
+                    <div class="alert alert-warning">
+                        No items found matching "@Model.Query".
+                    </div>
+                }
+            }
+        </div>
+    </div>
+</div>
