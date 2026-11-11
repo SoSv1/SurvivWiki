@@ -11,6 +11,7 @@ public class Item
     public string BeginnerTip { get; set; } = string.Empty;
     public string CraftingStation { get; set; } = "None"; 
     public PageStatus Status { get; set; } = PageStatus.Pending;
+    public string? SourceUrl { get; set; }
 
     // Navigation properties for the recipe (What this item makes, and what makes it)
     public List<RecipeIngredient> CraftedFrom { get; set; } = new();

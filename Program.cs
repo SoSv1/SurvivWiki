@@ -17,7 +17,7 @@ using (var scope = app.Services.CreateScope())
     var context = services.GetRequiredService<SurviveWikiContext>();
     
     // Call our static Initialize method
-    DbInitializer.Initialize(context);
+    DbInitializer.Initialize(context, app.Environment.ContentRootPath);
 }
 // ... rest of the file
 // Configure the HTTP request pipeline.

@@ -15,12 +15,15 @@
                 <div class="card-body">
                     <p class="lead">@Model.CurrentItem.Description</p>
                     
-                    <div class="alert alert-info">
-                        <strong>💡 Beginner Tip:</strong> @Model.CurrentItem.BeginnerTip
-                    </div>
+                    @if (!string.IsNullOrWhiteSpace(Model.CurrentItem.BeginnerTip))
+                    {
+                        <div class="alert alert-info">
+                            <strong>Beginner Tip:</strong> @Model.CurrentItem.BeginnerTip
+                        </div>
+                    }
 
                     <h3 class="h5 mt-4">Crafting Recipe</h3>
-                    <p class="text-muted small mb-2">Station: @Model.CurrentItem.CraftingStation</p>
+                    <p class="text-muted small mb-2">Crafting requirement: @Model.CurrentItem.CraftingStation</p>
                     
                     @if (Model.CurrentItem.CraftedFrom.Any())
                     {
@@ -42,6 +45,14 @@
                     else
                     {
                         <p class="text-muted">This item cannot be crafted.</p>
+                    }
+
+                    @if (!string.IsNullOrWhiteSpace(Model.CurrentItem.SourceUrl))
+                    {
+                        <p class="text-muted small mt-4 mb-0">
+                            Source: <a href="@Model.CurrentItem.SourceUrl">Don't Starve Wiki</a>,
+                            licensed under <a href="https://creativecommons.org/licenses/by-sa/3.0/">CC BY-SA 3.0</a>.
+                        </p>
                     }
                 </div>
             </div>

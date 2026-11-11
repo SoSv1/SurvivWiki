@@ -1,10 +1,84 @@
 ﻿@page
 @model IndexModel
 @{
-    ViewData["Title"] = "Home page";
+    ViewData["Title"] = "Field Guide";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="home-page">
+    <section class="home-hero">
+        <div class="hero-copy">
+            <p class="eyebrow"><span class="eyebrow-mark"></span> YOUR SURVIVAL FIELD GUIDE</p>
+            <h1>Out here,<br />knowledge is <span>everything.</span></h1>
+            <p class="hero-description">
+                Find the tools, materials, and recipes you need to make it through.
+                Consider this your field guide to the unknown.
+            </p>
+
+            <form class="home-search" method="get" asp-page="/Search" role="search">
+                <label class="visually-hidden" for="field-guide-search">Search items</label>
+                <span class="search-icon" aria-hidden="true">⌕</span>
+                <input id="field-guide-search" type="search" name="query"
+                       placeholder="Search for an item..." autocomplete="off" />
+                <button type="submit">Search <span aria-hidden="true">→</span></button>
+            </form>
+            <p class="search-hint">Try a tool, material, or anything you want to craft.</p>
+        </div>
+
+        <aside class="field-note" aria-label="Field note">
+            <div class="field-note-top">
+                <span>FIELD NOTE <span class="note-number">№ 001</span></span>
+                <span class="note-stamp" aria-hidden="true">◎</span>
+            </div>
+            <div class="field-illustration" aria-hidden="true">
+                <span class="sun"></span>
+                <span class="ridge ridge-back"></span>
+                <span class="ridge ridge-front"></span>
+                <span class="trail"></span>
+                <span class="map-pin">+</span>
+            </div>
+            <p class="note-kicker">STAY CURIOUS. STAY PREPARED.</p>
+            <p class="note-copy">Every useful thing starts with knowing where to look.</p>
+            <div class="note-coordinates"><span>FIELD GUIDE</span><span>EST. FOR THE WILD</span></div>
+        </aside>
+    </section>
+
+    <section class="home-tools" aria-labelledby="tools-heading">
+        <div class="section-heading">
+            <div>
+                <p class="eyebrow">PICK YOUR NEXT MOVE</p>
+                <h2 id="tools-heading">Make yourself at home out there.</h2>
+            </div>
+            <span class="section-index">01 / 03</span>
+        </div>
+
+        <div class="tool-grid">
+            <a class="tool-card tool-card-search" asp-page="/Search">
+                <span class="tool-icon" aria-hidden="true">⌕</span>
+                <span class="tool-number">01 — LOOK IT UP</span>
+                <h3>Know your gear</h3>
+                <p>Get the details on items, what they do, and how to make them.</p>
+                <span class="tool-link">Browse the field guide <span aria-hidden="true">↗</span></span>
+            </a>
+            <a class="tool-card tool-card-craft" asp-page="/ReverseLookup">
+                <span class="tool-icon" aria-hidden="true">⚒</span>
+                <span class="tool-number">02 — USE WHAT YOU HAVE</span>
+                <h3>Make a plan</h3>
+                <p>Pick the materials in your pack and see what you can craft.</p>
+                <span class="tool-link">Find a recipe <span aria-hidden="true">↗</span></span>
+            </a>
+            <div class="tool-card tool-card-tip">
+                <span class="tool-icon" aria-hidden="true">✳</span>
+                <span class="tool-number">03 — A GOOD HABIT</span>
+                <h3>Leave no guesswork</h3>
+                <p>A little know-how goes a long way. Check the recipe before you spend your supplies.</p>
+                <span class="tool-link tool-link-muted">Prepared beats lucky</span>
+            </div>
+        </div>
+    </section>
+
+    <div class="home-signoff">
+        <span class="signoff-rule"></span>
+        <p>THE WILD IS BIG. YOUR NEXT STEP DOESN'T HAVE TO BE A GUESS.</p>
+        <span class="signoff-rule"></span>
+    </div>
 </div>

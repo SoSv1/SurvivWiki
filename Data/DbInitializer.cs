@@ -1,47 +1,96 @@
+using System.Text.Json;
+using Microsoft.EntityFrameworkCore;
 using SurviveWiki.Models;
 
 namespace SurviveWiki.Data;
 
 public static class DbInitializer
 {
-    public static void Initialize(SurviveWikiContext context)
+    public static void Initialize(SurviveWikiContext context, string contentRootPath)
     {
-        // Creates the DB if it doesn't exist (good for prototyping)
-        context.Database.EnsureCreated();
+        context.Database.Migrate();
+        SeedWikiItems(context, contentRootPath);
+    }
 
-        // Look for any items. If we have items, the DB is already seeded.
-        if (context.Items.Any())
+    private static void SeedWikiItems(SurviveWikiContext context, string contentRootPath)
+    {
+        var catalogPath = Path.Combine(contentRootPath, "Data", "wiki-items.json");
+        var catalogJson = File.ReadAllText(catalogPath);
+        var catalog = JsonSerializer.Deserialize<WikiCatalog>(
+            catalogJson,
+            new JsonSerializerOptions { PropertyNameCaseInsensitive = true })
+            ?? throw new InvalidDataException($"Could not read the wiki item catalog at {catalogPath}.");
+
+        var itemsByName = context.Items.ToDictionary(item => item.Name, StringComparer.OrdinalIgnoreCase);
+        foreach (var wikiItem in catalog.Items)
         {
-            return;
+            if (!itemsByName.TryGetValue(wikiItem.Name, out var item))
+            {
+                item = new Item { Name = wikiItem.Name };
+                context.Items.Add(item);
+                itemsByName.Add(item.Name, item);
+            }
+
+            item.Category = wikiItem.Category;
+            item.Description = wikiItem.Description;
+            item.BeginnerTip = wikiItem.BeginnerTip;
+            item.CraftingStation = wikiItem.CraftingStation;
+            item.SourceUrl = wikiItem.SourceUrl;
+            item.Status = PageStatus.Approved;
         }
 
-        // 1. Create the Base Materials (These aren't crafted from anything)
-        var flint = new Item { Name = "Flint", Category = "Material", Description = "A sharp rock.", BeginnerTip = "Found scattered on the ground.", Status = PageStatus.Approved };
-        var twigs = new Item { Name = "Twigs", Category = "Material", Description = "Small sticks.", BeginnerTip = "Harvested from Saplings.", Status = PageStatus.Approved };
-        var cutGrass = new Item { Name = "Cut Grass", Category = "Material", Description = "Common grass.", BeginnerTip = "Harvested from Grass Tufts.", Status = PageStatus.Approved };
-        var log = new Item { Name = "Log", Category = "Material", Description = "Wood from a tree.", BeginnerTip = "Chop down trees to get this.", Status = PageStatus.Approved };
-
-        // 2. Create the Craftable Items
-        var axe = new Item { Name = "Axe", Category = "Tool", Description = "Used to chop down trees.", BeginnerTip = "Make this immediately on day one.", CraftingStation = "None", Status = PageStatus.Approved };
-        var campfire = new Item { Name = "Campfire", Category = "Light", Description = "Provides light and heat.", BeginnerTip = "Build this before night falls so you don't die!", CraftingStation = "None", Status = PageStatus.Approved };
-
-        // Add to context and save so EF Core generates their IDs
-        context.Items.AddRange(flint, twigs, cutGrass, log, axe, campfire);
         context.SaveChanges();
 
-        // 3. Create the Recipes (Connecting the items together)
-        var recipes = new RecipeIngredient[]
+        var recipes = context.RecipeIngredients
+            .Select(recipe => new { recipe.ResultItemId, recipe.IngredientItemId })
+            .AsEnumerable()
+            .Select(recipe => (recipe.ResultItemId, recipe.IngredientItemId))
+            .ToHashSet();
+
+        foreach (var wikiItem in catalog.Items)
         {
-            // Axe requires: 1 Twig, 1 Flint
-            new RecipeIngredient { ResultItemId = axe.Id, IngredientItemId = twigs.Id, QuantityRequired = 1 },
-            new RecipeIngredient { ResultItemId = axe.Id, IngredientItemId = flint.Id, QuantityRequired = 1 },
+            var resultItem = itemsByName[wikiItem.Name];
+            foreach (var ingredient in wikiItem.Ingredients)
+            {
+                if (!itemsByName.TryGetValue(ingredient.Name, out var ingredientItem))
+                {
+                    continue;
+                }
 
-            // Campfire requires: 3 Cut Grass, 2 Logs
-            new RecipeIngredient { ResultItemId = campfire.Id, IngredientItemId = cutGrass.Id, QuantityRequired = 3 },
-            new RecipeIngredient { ResultItemId = campfire.Id, IngredientItemId = log.Id, QuantityRequired = 2 }
-        };
+                if (recipes.Add((resultItem.Id, ingredientItem.Id)))
+                {
+                    context.RecipeIngredients.Add(new RecipeIngredient
+                    {
+                        ResultItemId = resultItem.Id,
+                        IngredientItemId = ingredientItem.Id,
+                        QuantityRequired = ingredient.Quantity
+                    });
+                }
+            }
+        }
 
-        context.RecipeIngredients.AddRange(recipes);
         context.SaveChanges();
+    }
+
+    private sealed class WikiCatalog
+    {
+        public List<WikiItem> Items { get; set; } = new();
+    }
+
+    private sealed class WikiItem
+    {
+        public string Name { get; set; } = string.Empty;
+        public string Category { get; set; } = "Item";
+        public string Description { get; set; } = string.Empty;
+        public string BeginnerTip { get; set; } = string.Empty;
+        public string CraftingStation { get; set; } = "Not specified";
+        public List<WikiIngredient> Ingredients { get; set; } = new();
+        public string SourceUrl { get; set; } = string.Empty;
+    }
+
+    private sealed class WikiIngredient
+    {
+        public string Name { get; set; } = string.Empty;
+        public int Quantity { get; set; }
     }
 }
