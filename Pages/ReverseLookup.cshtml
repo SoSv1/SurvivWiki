@@ -21,20 +21,62 @@
                 </div>
                 <div class="card-body">
                     <form method="post">
-                        @foreach (var material in Model.AvailableMaterials)
-                        {
-                            <div class="form-check mb-2">
-                                <input class="form-check-input" type="checkbox" 
-                                       name="SelectedItemIds" 
-                                       value="@material.Id" 
-                                       id="item_@material.Id"
-                                       @(Model.SelectedItemIds.Contains(material.Id) ? "checked" : "")>
-                                <label class="form-check-label user-select-none item-with-icon" for="item_@material.Id">
-                                    <partial name="_ItemIcon" model="new ItemIconModel(material.Name, 28)" />
-                                    @material.Name
-                                </label>
-                            </div>
+                        <div class="accordion" id="inventoryCategories">
+                        @{
+                            var categoryIndex = 0;
+                            var materialGroups = Model.AvailableMaterials
+                                .GroupBy(material => material.Category)
+                                .ToList();
+                            var categories = materialGroups
+                                .Where(group => group.Count() > 1)
+                                .Select(group => new { Name = group.Key, Materials = group.ToList() })
+                                .OrderBy(group => group.Name)
+                                .ToList();
+                            var singleItems = materialGroups
+                                .Where(group => group.Count() == 1)
+                                .SelectMany(group => group)
+                                .OrderBy(material => material.Name)
+                                .ToList();
+                            if (singleItems.Any())
+                            {
+                                categories.Add(new { Name = "Other", Materials = singleItems });
+                            }
                         }
+                        @foreach (var category in categories)
+                        {
+                            var collapseId = $"inventory-category-{categoryIndex}";
+                            var hasSelectedItems = category.Materials.Any(item => Model.SelectedItemIds.Contains(item.Id));
+                            <div class="accordion-item">
+                                <h2 class="accordion-header">
+                                    <button class="accordion-button @(hasSelectedItems ? "" : "collapsed")" type="button"
+                                            data-bs-toggle="collapse" data-bs-target="#@collapseId"
+                                            aria-expanded="@(hasSelectedItems ? "true" : "false")" aria-controls="@collapseId">
+                                        @category.Name <span class="badge text-bg-secondary ms-2">@category.Materials.Count</span>
+                                    </button>
+                                </h2>
+                                <div id="@collapseId" class="accordion-collapse collapse @(hasSelectedItems ? "show" : "")"
+                                     data-bs-parent="#inventoryCategories">
+                                    <div class="accordion-body">
+                                    @foreach (var material in category.Materials)
+                                    {
+                                        <div class="form-check mb-2">
+                                            <input class="form-check-input" type="checkbox"
+                                                   name="SelectedItemIds"
+                                                   value="@material.Id"
+                                                   id="item_@material.Id"
+                                                   @(Model.SelectedItemIds.Contains(material.Id) ? "checked" : "")>
+                                            <label class="form-check-label user-select-none item-with-icon" for="item_@material.Id">
+                                                <partial name="_ItemIcon" model="new ItemIconModel(material.Name, 28)" />
+                                                @material.Name
+                                            </label>
+                                        </div>
+                                    }
+                                    </div>
+                                </div>
+                            </div>
+                            categoryIndex++;
+                        }
+                        </div>
                         <button type="submit" class="btn btn-primary w-100 mt-3">Find Recipes</button>
                     </form>
                 </div>
