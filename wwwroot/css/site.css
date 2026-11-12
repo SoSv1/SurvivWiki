@@ -1139,3 +1139,141 @@ a.tool-card:hover {
     grid-template-columns: 1fr 4.5rem 2.75rem;
   }
 }
+
+/* ---------- Review queue (Pages/Review.cshtml) ----------
+   Shares the card, badge and button styles of the contributor form. */
+
+.review-note {
+  margin-bottom: 1.25rem;
+  padding: 0.6rem 0.8rem;
+  border-left: 3px solid var(--accent);
+  background: var(--paper);
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+.review-notice {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem 1rem;
+  margin-bottom: 1.25rem;
+  padding: 0.6rem 0.6rem 0.6rem 1rem;
+  border-radius: 6px;
+  background: var(--forest);
+  color: #f8f6ed;
+}
+
+.review-notice form,
+.review-decided form {
+  margin: 0;
+}
+
+.review-undo {
+  min-height: 2.75rem;
+  padding: 0 0.9rem;
+  border: 1px solid currentColor;
+  border-radius: 4px;
+  background: transparent;
+  color: inherit;
+  font-weight: 600;
+}
+
+.review-undo:hover,
+.review-undo:focus-visible {
+  background: rgb(127 127 127 / 18%);
+}
+
+.review-heading {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin: 1.5rem 0 0.75rem;
+  font-size: 1.15rem;
+  font-weight: 700;
+}
+
+.review-count {
+  padding: 0.1rem 0.6rem;
+  border-radius: 999px;
+  background: var(--paper);
+  color: var(--forest);
+  font-size: 0.9rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.review-empty {
+  padding: 1.25rem;
+  border: 1px dashed var(--line);
+  border-radius: 6px;
+  color: var(--muted);
+}
+
+.review-card-title {
+  margin: 0;
+  font-size: 1.35rem;
+  overflow-wrap: anywhere;
+}
+
+.review-actions {
+  margin-top: 1.25rem;
+}
+
+.review-actions form {
+  margin: 0;
+}
+
+.review-page .review-reject {
+  border-color: var(--danger);
+  color: var(--danger);
+}
+
+.review-page .review-reject:hover,
+.review-page .review-reject:focus-visible {
+  background: #fbeeed;
+  color: var(--danger);
+}
+
+.review-decided {
+  margin: 0;
+  padding: 0;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: #fff;
+  list-style: none;
+}
+
+.review-decided li {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem 0.75rem;
+  padding: 0.5rem 0.6rem 0.5rem 1rem;
+  color: var(--forest);
+}
+
+.review-decided li + li {
+  border-top: 1px solid #eceadf;
+}
+
+.review-decided-name {
+  flex: 1;
+  min-width: 8rem;
+  color: var(--ink);
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}
+
+.review-status {
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.review-status.is-approved {
+  color: #2f6b45;
+}
+
+.review-status.is-rejected {
+  color: var(--danger);
+}

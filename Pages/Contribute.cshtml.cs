@@ -109,7 +109,7 @@ public class ContributeModel : PageModel
         var existing = await FindByNameAsync(name);
         return new JsonResult(new
         {
-            status = existing is null ? "available"
+            status = existing is null || existing.Status == PageStatus.Rejected ? "available"
                 : existing.Status == PageStatus.Approved ? "exists"
                 : "waiting",
             name = existing?.Name,
@@ -135,26 +135,34 @@ public class ContributeModel : PageModel
             return Page();
         }
 
-        var item = new Item
+        // A rejected page keeps its name, so a corrected version replaces it
+        // instead of creating a second page with the same name.
+        var name = Input.Name.Trim();
+        var item = await _context.Items
+            .Include(candidate => candidate.CraftedFrom)
+            .FirstOrDefaultAsync(candidate => candidate.Status == PageStatus.Rejected &&
+                                              candidate.Name.ToLower() == name.ToLower());
+        if (item is null)
         {
-            Name = Input.Name.Trim(),
-            Category = Input.Category,
-            CraftingStation = Input.CraftingStation,
-            Description = Input.Description.Trim(),
-            BeginnerTip = Input.BeginnerTip?.Trim() ?? string.Empty,
-            Status = PageStatus.Pending,
-            CraftedFrom = ingredients
-                .Select(ingredient => new RecipeIngredient
-                {
-                    IngredientItemId = ingredient.ItemId,
-                    QuantityRequired = ingredient.Quantity,
-                })
-                .ToList(),
-        };
+            item = new Item();
+            _context.Items.Add(item);
+        }
+
+        item.Name = name;
+        item.Category = Input.Category;
+        item.CraftingStation = Input.CraftingStation;
+        item.Description = Input.Description.Trim();
+        item.BeginnerTip = Input.BeginnerTip?.Trim() ?? string.Empty;
+        item.Status = PageStatus.Pending;
+        item.CraftedFrom.Clear();
+        item.CraftedFrom.AddRange(ingredients.Select(ingredient => new RecipeIngredient
+        {
+            IngredientItemId = ingredient.ItemId,
+            QuantityRequired = ingredient.Quantity,
+        }));
 
         try
         {
-            _context.Items.Add(item);
             await _context.SaveChangesAsync();
         }
         catch (DbUpdateException)
@@ -181,7 +189,7 @@ public class ContributeModel : PageModel
 
         // Names must stay unique: the seeder and the item URLs both look pages up by name.
         var existing = await FindByNameAsync(name);
-        if (existing is not null)
+        if (existing is not null && existing.Status != PageStatus.Rejected)
         {
             ModelState.AddModelError("Input.Name", existing.Status == PageStatus.Approved
                 ? $"A page for {existing.Name} already exists. Search for it instead of adding it again."
