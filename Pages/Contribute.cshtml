@@ -1,0 +1,204 @@
+@page
+@model SurviveWiki.Pages.ContributeModel
+@{
+    ViewData["Title"] = "Add a page";
+}
+
+<div class="contribute-page">
+    @if (!string.IsNullOrEmpty(Model.SubmittedName))
+    {
+        <section class="contribute-done" role="status">
+            <p class="contribute-eyebrow">SENT FOR REVIEW</p>
+            <h1>Thanks! “@Model.SubmittedName” is waiting for review.</h1>
+            <p>
+                A moderator checks every new page before players can see it.
+                Until then it will not show up in search.
+            </p>
+            <dl class="contribute-status">
+                <dt>Status</dt>
+                <dd><span class="contribute-badge">Pending review</span></dd>
+            </dl>
+            <div class="contribute-actions">
+                <a class="contribute-primary" asp-page="/Contribute">Add another page</a>
+                <a class="contribute-secondary" asp-page="/Index">Back to home</a>
+            </div>
+        </section>
+    }
+    else
+    {
+        <header class="contribute-header">
+            <p class="contribute-eyebrow">FOR CONTRIBUTORS</p>
+            <h1>Add a page</h1>
+            <p class="contribute-lead">
+                Share an item that is missing from the wiki. You can preview the page before you send it,
+                and a moderator reviews it before players see it.
+            </p>
+        </header>
+
+        <form method="post" class="contribute-form" novalidate data-contribute>
+            <div asp-validation-summary="ModelOnly" class="contribute-summary" role="alert"></div>
+
+            @if (!ViewData.ModelState.IsValid)
+            {
+                <p class="contribute-summary" role="alert">
+                    Some fields need a fix before this can be previewed. They are marked below.
+                </p>
+            }
+
+            <fieldset>
+                <legend><span class="contribute-step">1</span> What is it?</legend>
+
+                <div class="contribute-field">
+                    <label asp-for="Input.Name"></label>
+                    <p class="contribute-hint" id="name-hint">Use the exact name shown in the game, for example “Fire Pit”.</p>
+                    <input asp-for="Input.Name" class="form-control" autocomplete="off" maxlength="60"
+                           aria-describedby="name-hint name-status" data-contribute-name />
+                    <p class="contribute-name-status" id="name-status" aria-live="polite" data-contribute-name-status></p>
+                    <span asp-validation-for="Input.Name" class="contribute-error"></span>
+                </div>
+
+                <div class="contribute-row">
+                    <div class="contribute-field">
+                        <label asp-for="Input.Category"></label>
+                        <select asp-for="Input.Category" class="form-select">
+                            <option value="">Choose a category…</option>
+                            @foreach (var category in ContributeModel.Categories)
+                            {
+                                <option value="@category">@(category == "Item" ? "Other item" : category)</option>
+                            }
+                        </select>
+                        <span asp-validation-for="Input.Category" class="contribute-error"></span>
+                    </div>
+
+                    <div class="contribute-field">
+                        <label asp-for="Input.CraftingStation"></label>
+                        <select asp-for="Input.CraftingStation" class="form-select">
+                            @foreach (var station in ContributeModel.Stations)
+                            {
+                                <option value="@station.Value">@station.Label</option>
+                            }
+                        </select>
+                        <span asp-validation-for="Input.CraftingStation" class="contribute-error"></span>
+                    </div>
+                </div>
+            </fieldset>
+
+            <fieldset>
+                <legend><span class="contribute-step">2</span> What do you need to craft it?</legend>
+                <p class="contribute-hint">
+                    Start typing and pick an ingredient from the suggestions. Leave this empty if the item cannot be crafted.
+                </p>
+
+                <div class="contribute-ingredient-head" aria-hidden="true">
+                    <span>Ingredient</span><span>Amount</span><span></span>
+                </div>
+
+                <div data-contribute-rows data-max="@ContributeModel.MaxIngredients">
+                    @for (var i = 0; i < Model.Input.Ingredients.Count; i++)
+                    {
+                        <div class="contribute-ingredient" data-contribute-row>
+                            <div>
+                                <input asp-for="Input.Ingredients[i].Name" class="form-control" list="ingredient-options"
+                                       autocomplete="off" maxlength="60" placeholder="e.g. Twigs"
+                                       aria-label="Ingredient @(i + 1) name" />
+                                <span asp-validation-for="Input.Ingredients[i].Name" class="contribute-error"></span>
+                            </div>
+                            <div>
+                                <input asp-for="Input.Ingredients[i].Quantity" class="form-control" type="number"
+                                       min="1" max="99" inputmode="numeric" aria-label="Ingredient @(i + 1) amount" />
+                                <span asp-validation-for="Input.Ingredients[i].Quantity" class="contribute-error"></span>
+                            </div>
+                            <button type="button" class="contribute-remove" data-contribute-remove
+                                    aria-label="Remove ingredient @(i + 1)">×</button>
+                        </div>
+                    }
+                </div>
+
+                <button type="button" class="contribute-add" data-contribute-add>+ Add another ingredient</button>
+
+                <datalist id="ingredient-options">
+                    @foreach (var option in Model.IngredientOptions)
+                    {
+                        <option value="@option"></option>
+                    }
+                </datalist>
+            </fieldset>
+
+            <fieldset>
+                <legend><span class="contribute-step">3</span> Explain it to a beginner</legend>
+
+                <div class="contribute-field">
+                    <label asp-for="Input.Description"></label>
+                    <p class="contribute-hint" id="description-hint">What is it for, and when would a new player want it? One or two sentences is enough.</p>
+                    <textarea asp-for="Input.Description" class="form-control" rows="4" maxlength="600"
+                              aria-describedby="description-hint"></textarea>
+                    <span asp-validation-for="Input.Description" class="contribute-error"></span>
+                </div>
+
+                <div class="contribute-field">
+                    <label asp-for="Input.BeginnerTip">Beginner tip <span class="contribute-optional">(optional)</span></label>
+                    <p class="contribute-hint" id="tip-hint">One thing you wish you had known the first time you used it.</p>
+                    <input asp-for="Input.BeginnerTip" class="form-control" maxlength="200" aria-describedby="tip-hint" />
+                    <span asp-validation-for="Input.BeginnerTip" class="contribute-error"></span>
+                </div>
+            </fieldset>
+
+            <div class="contribute-actions">
+                <button type="submit" class="@(Model.ShowPreview ? "contribute-secondary" : "contribute-primary")"
+                        asp-page-handler="Preview">
+                    @(Model.ShowPreview ? "Update preview" : "Preview page")
+                </button>
+                @if (!Model.ShowPreview)
+                {
+                    <span class="contribute-hint">Nothing is sent yet. You will see the page first.</span>
+                }
+            </div>
+
+            @if (Model.ShowPreview)
+            {
+                <section class="contribute-preview" id="preview" tabindex="-1" aria-labelledby="preview-heading">
+                    <p class="contribute-eyebrow" id="preview-heading">PREVIEW · NOT SENT YET</p>
+
+                    <article class="contribute-card">
+                        <div class="contribute-card-top">
+                            <h2>@Model.Input.Name.Trim()</h2>
+                            <span class="contribute-badge">@(Model.Input.Category == "Item" ? "Other item" : Model.Input.Category)</span>
+                        </div>
+                        <p>@Model.Input.Description.Trim()</p>
+
+                        @if (!string.IsNullOrWhiteSpace(Model.Input.BeginnerTip))
+                        {
+                            <p class="contribute-tip"><strong>Beginner tip:</strong> @Model.Input.BeginnerTip.Trim()</p>
+                        }
+
+                        <h3>Crafting recipe</h3>
+                        <p class="contribute-hint">Crafted at: @Model.StationLabel(Model.Input.CraftingStation)</p>
+                        @if (Model.PreviewIngredients.Any())
+                        {
+                            <ul class="contribute-recipe">
+                                @foreach (var ingredient in Model.PreviewIngredients)
+                                {
+                                    <li><span>@ingredient.Name</span><span>× @ingredient.Quantity</span></li>
+                                }
+                            </ul>
+                        }
+                        else
+                        {
+                            <p>This item cannot be crafted.</p>
+                        }
+                    </article>
+
+                    <div class="contribute-actions">
+                        <button type="submit" class="contribute-primary" asp-page-handler="Submit">Submit for review</button>
+                        <span class="contribute-hint">Need a change? Edit the form above and update the preview.</span>
+                    </div>
+                </section>
+            }
+        </form>
+    }
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script src="~/js/contribute.js" asp-append-version="true"></script>
+}

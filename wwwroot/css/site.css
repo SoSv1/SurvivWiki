@@ -766,3 +766,376 @@ a.tool-card:hover {
     transition: none;
   }
 }
+
+/* ---------- Contributor form (Pages/Contribute.cshtml) ---------- */
+
+.contribute-page {
+  --forest: #233d32;
+  --moss: #718268;
+  --paper: #f5f2e9;
+  --ink: #26342d;
+  --muted: #5f6a62;
+  --line: #d9d6c9;
+  --accent: #a8742f;
+  --danger: #a3302a;
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 1.25rem 0 2.5rem;
+  color: var(--ink);
+}
+
+.contribute-eyebrow {
+  margin-bottom: 0.5rem;
+  color: var(--moss);
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+}
+
+.contribute-page h1 {
+  margin: 0 0 0.6rem;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(1.8rem, 5vw, 2.6rem);
+  font-weight: 400;
+  letter-spacing: -0.03em;
+}
+
+.contribute-lead {
+  max-width: 36rem;
+  margin-bottom: 1.5rem;
+  color: var(--muted);
+  line-height: 1.6;
+}
+
+.contribute-form fieldset {
+  margin: 0 0 1.25rem;
+  padding: 1.25rem;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: #fff;
+}
+
+.contribute-form legend {
+  float: none;
+  width: auto;
+  margin: 0 0 0.75rem;
+  padding: 0;
+  font-size: 1.1rem;
+  font-weight: 700;
+}
+
+.contribute-step {
+  display: inline-grid;
+  place-items: center;
+  width: 1.6rem;
+  height: 1.6rem;
+  margin-right: 0.4rem;
+  border-radius: 50%;
+  background: var(--forest);
+  color: #fff;
+  font-size: 0.85rem;
+}
+
+.contribute-field {
+  margin-bottom: 1rem;
+}
+
+.contribute-field:last-child {
+  margin-bottom: 0;
+}
+
+.contribute-field label {
+  display: block;
+  font-weight: 600;
+}
+
+.contribute-optional {
+  color: var(--muted);
+  font-weight: 400;
+}
+
+.contribute-hint {
+  margin: 0.1rem 0 0.4rem;
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+.contribute-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.contribute-row .contribute-field {
+  margin-bottom: 0;
+}
+
+.contribute-row label {
+  margin-bottom: 0.4rem;
+}
+
+.contribute-form .form-control,
+.contribute-form .form-select {
+  min-height: 2.75rem;
+}
+
+.contribute-form .input-validation-error {
+  border-color: var(--danger);
+}
+
+.contribute-error {
+  display: block;
+  color: var(--danger);
+  font-size: 0.9rem;
+}
+
+.contribute-error:empty {
+  display: none;
+}
+
+.contribute-summary {
+  margin-bottom: 1rem;
+  padding: 0.75rem 1rem;
+  border-left: 4px solid var(--danger);
+  border-radius: 4px;
+  background: #fbeeed;
+  color: var(--danger);
+}
+
+.contribute-summary:empty,
+.contribute-summary.validation-summary-valid {
+  display: none;
+}
+
+.contribute-summary ul {
+  margin: 0;
+  padding-left: 1.1rem;
+}
+
+.contribute-name-status {
+  min-height: 1.3rem;
+  margin: 0.3rem 0 0;
+  font-size: 0.9rem;
+}
+
+.contribute-name-status.is-free {
+  color: #2f6b45;
+}
+
+.contribute-name-status.is-taken {
+  color: var(--danger);
+}
+
+.contribute-ingredient-head,
+.contribute-ingredient {
+  display: grid;
+  grid-template-columns: 1fr 6rem 2.75rem;
+  gap: 0.5rem;
+}
+
+.contribute-ingredient-head {
+  color: var(--muted);
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.contribute-ingredient {
+  align-items: start;
+  margin-top: 0.4rem;
+}
+
+.contribute-remove {
+  width: 2.75rem;
+  height: 2.75rem;
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  background: #fff;
+  color: var(--muted);
+  font-size: 1.3rem;
+  line-height: 1;
+}
+
+.contribute-remove:hover,
+.contribute-remove:focus-visible {
+  border-color: var(--danger);
+  color: var(--danger);
+}
+
+.contribute-add {
+  min-height: 2.75rem;
+  margin-top: 0.6rem;
+  padding: 0 0.9rem;
+  border: 1px dashed var(--moss);
+  border-radius: 4px;
+  background: transparent;
+  color: var(--forest);
+  font-weight: 600;
+}
+
+.contribute-add:hover,
+.contribute-add:focus-visible {
+  background: var(--paper);
+}
+
+.contribute-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem 1rem;
+}
+
+.contribute-actions .contribute-hint {
+  margin: 0;
+}
+
+.contribute-primary,
+.contribute-secondary {
+  display: inline-flex;
+  align-items: center;
+  min-height: 3rem;
+  padding: 0 1.4rem;
+  border-radius: 4px;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.contribute-primary {
+  border: 1px solid var(--forest);
+  background: var(--forest);
+  color: #fff;
+}
+
+.contribute-primary:hover,
+.contribute-primary:focus-visible {
+  background: #182c24;
+  color: #fff;
+}
+
+.contribute-secondary {
+  border: 1px solid var(--forest);
+  background: #fff;
+  color: var(--forest);
+}
+
+.contribute-secondary:hover,
+.contribute-secondary:focus-visible {
+  background: var(--paper);
+  color: var(--forest);
+}
+
+.contribute-preview {
+  margin-top: 1.5rem;
+  padding: 1.25rem;
+  border: 2px dashed var(--accent);
+  border-radius: 6px;
+  background: var(--paper);
+  scroll-margin-top: 1rem;
+}
+
+.contribute-preview:focus {
+  outline: none;
+}
+
+.contribute-preview .contribute-eyebrow {
+  color: var(--accent);
+}
+
+.contribute-card {
+  margin-bottom: 1rem;
+  padding: 1.25rem;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: #fff;
+}
+
+.contribute-card-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 0.75rem;
+}
+
+.contribute-card h2 {
+  margin: 0;
+  font-size: 1.5rem;
+  overflow-wrap: anywhere;
+}
+
+.contribute-card h3 {
+  margin: 1.25rem 0 0.25rem;
+  font-size: 1.05rem;
+}
+
+.contribute-card p {
+  overflow-wrap: anywhere;
+}
+
+.contribute-badge {
+  flex: none;
+  padding: 0.2rem 0.7rem;
+  border-radius: 999px;
+  background: var(--paper);
+  color: var(--forest);
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.contribute-tip {
+  padding: 0.6rem 0.8rem;
+  border-left: 3px solid var(--moss);
+  background: var(--paper);
+}
+
+.contribute-recipe {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.contribute-recipe li {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.5rem 0;
+  border-top: 1px solid #eceadf;
+  font-variant-numeric: tabular-nums;
+}
+
+.contribute-done {
+  padding: 1.5rem;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: #fff;
+}
+
+.contribute-done h1 {
+  font-size: clamp(1.5rem, 4vw, 2rem);
+  overflow-wrap: anywhere;
+}
+
+.contribute-status {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin: 1rem 0 1.5rem;
+}
+
+.contribute-status dt {
+  color: var(--muted);
+  font-weight: 400;
+}
+
+.contribute-status dd {
+  margin: 0;
+}
+
+@media (max-width: 575.98px) {
+  .contribute-row {
+    grid-template-columns: 1fr;
+  }
+
+  .contribute-ingredient-head,
+  .contribute-ingredient {
+    grid-template-columns: 1fr 4.5rem 2.75rem;
+  }
+}
