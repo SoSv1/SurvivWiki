@@ -1,0 +1,115 @@
+{
+  "note": "Beginner plan for task N3. Wrap an item name in [[double brackets]] to link it to its wiki page; use [[Item Name|shown text]] to change the visible words.",
+  "steps": [
+    {
+      "day": 1,
+      "title": "Pick up twigs, grass and flint as you walk",
+      "instructions": "Pull [[Twigs]] from small saplings and [[Cut Grass]] from grass tufts. [[Flint]] is the sharp grey stone lying on the ground. Aim for about 10 of each."
+    },
+    {
+      "day": 1,
+      "title": "Craft an Axe and chop trees",
+      "instructions": "An [[Axe]] costs 1 Twigs and 1 Flint. Chop a few trees until you have at least 10 [[Log|Logs]]."
+    },
+    {
+      "day": 1,
+      "title": "Craft a Pickaxe and mine boulders",
+      "instructions": "A [[Pickaxe]] costs 2 Twigs and 2 Flint. Boulders give [[Rocks]] and more Flint. Boulders with yellow veins also drop a [[Gold Nugget]], which you need tomorrow."
+    },
+    {
+      "day": 1,
+      "title": "Grab food on the way",
+      "instructions": "Pick [[Berries]] from bushes and pull [[Carrot|Carrots]] out of the ground. Eat when the stomach meter gets low, not before."
+    },
+    {
+      "day": 1,
+      "title": "Light a Campfire before it gets dark",
+      "instructions": "Standing in total darkness kills you. When the screen turns dusky, build a [[Campfire]] (2 Logs and 3 Cut Grass) and stay beside it until morning. Add Logs to keep it burning."
+    },
+    {
+      "day": 2,
+      "title": "Keep a Torch ready",
+      "instructions": "A [[Torch]] costs 2 Cut Grass and 2 Twigs. It is your emergency light if night catches you away from a fire."
+    },
+    {
+      "day": 2,
+      "title": "Find a Gold Nugget",
+      "instructions": "If you did not get a [[Gold Nugget]] yesterday, look for boulders with yellow veins in rocky areas and mine them."
+    },
+    {
+      "day": 2,
+      "title": "Build a Science Machine",
+      "instructions": "The [[Science Machine]] costs 1 Gold Nugget, 4 Logs and 4 Rocks. Stand next to it to unlock new recipes."
+    },
+    {
+      "day": 2,
+      "title": "Make a Backpack",
+      "instructions": "A [[Backpack]] costs 4 Cut Grass and 4 Twigs and gives you extra inventory slots. Craft it at the Science Machine."
+    },
+    {
+      "day": 2,
+      "title": "Craft a Shovel",
+      "instructions": "A [[Shovel]] costs 2 Twigs and 2 Flint. You will use it later to dig up bushes and move them near your camp."
+    },
+    {
+      "day": 3,
+      "title": "Choose a place for your camp",
+      "instructions": "Pick a spot close to grass, saplings and berry bushes. Build your next Science Machine and fire there so you stop carrying everything."
+    },
+    {
+      "day": 3,
+      "title": "Turn grass into Rope and logs into Boards",
+      "instructions": "[[Rope]] costs 3 Cut Grass and [[Boards]] cost 4 Logs. Most tools and buildings from here on need them."
+    },
+    {
+      "day": 3,
+      "title": "Craft a Spear and a Log Suit",
+      "instructions": "A [[Spear]] (2 Twigs, 1 Rope, 1 Flint) lets you fight back. A [[Log Suit]] (8 Logs, 2 Rope) absorbs most of the damage you take."
+    },
+    {
+      "day": 3,
+      "title": "Build a Chest",
+      "instructions": "A [[Chest]] costs 3 Boards. Store spare materials in it so your inventory stays free."
+    },
+    {
+      "day": 4,
+      "title": "Set Traps for rabbits",
+      "instructions": "A [[Trap]] costs 6 Cut Grass and 2 Twigs. Place it on top of a rabbit hole and come back later for meat."
+    },
+    {
+      "day": 4,
+      "title": "Cook your food",
+      "instructions": "Hold raw food over the fire to cook it. Cooked food restores more and some raw food hurts you."
+    },
+    {
+      "day": 4,
+      "title": "Stock up on fuel",
+      "instructions": "Keep at least 10 [[Log|Logs]] and a stack of [[Cut Grass]] in a chest so you can always make a fire at night."
+    },
+    {
+      "day": 4,
+      "title": "Build a Drying Rack",
+      "instructions": "A [[Drying Rack]] costs 3 Twigs, 2 Charcoal and 3 Rope. It turns meat into food that lasts a long time. [[Charcoal]] comes from burnt trees."
+    },
+    {
+      "day": 5,
+      "title": "Move bushes and saplings to your camp",
+      "instructions": "Use the [[Shovel]] to dig up berry bushes, grass tufts and saplings, then replant them next to camp for a steady supply."
+    },
+    {
+      "day": 5,
+      "title": "Build an Alchemy Engine",
+      "instructions": "The [[Alchemy Engine]] unlocks the next tier of recipes, including better armour and winter gear."
+    },
+    {
+      "day": 5,
+      "title": "Get ready for a hound attack",
+      "instructions": "Hounds attack after roughly a week. Keep your [[Spear]] and [[Log Suit]] in your inventory, not in a chest."
+    },
+    {
+      "day": 5,
+      "title": "Start planning for winter",
+      "instructions": "Winter starts around day 21 and the cold kills. A [[Thermal Stone]] (10 Rocks, 1 Pickaxe, 3 Flint) is the first thing to make."
+    }
+  ]
+}

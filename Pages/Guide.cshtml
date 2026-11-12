@@ -1,0 +1,86 @@
+@page
+@model SurviveWiki.Pages.GuideModel
+@{
+    ViewData["Title"] = "The First 5 Days";
+}
+
+<div class="guide-page" data-guide>
+    <header class="guide-header">
+        <p class="guide-eyebrow">BEGINNER PLAN</p>
+        <h1>The First 5 Days</h1>
+        <p class="guide-lead">
+            Do these in order and tick each one off as you finish it in the game.
+            Your progress is saved on this device.
+        </p>
+    </header>
+
+    @if (!Model.Days.Any())
+    {
+        <div class="alert alert-warning" role="alert">
+            The plan could not be loaded right now. You can still
+            <a asp-page="/Search">search for an item</a> or
+            <a asp-page="/ReverseLookup">see what you can craft</a>.
+        </div>
+    }
+    else
+    {
+        <section class="guide-status" aria-label="Your progress">
+            <div class="guide-progress" role="progressbar" aria-label="Plan progress"
+                 aria-valuemin="0" aria-valuemax="@Model.TotalSteps" aria-valuenow="0" data-guide-bar>
+                <span class="guide-progress-fill" data-guide-fill></span>
+            </div>
+            <div class="guide-status-row">
+                <p class="guide-progress-text" aria-live="polite" data-guide-text>
+                    0% complete · 0 of @Model.TotalSteps steps
+                </p>
+                <button type="button" class="guide-reset" data-guide-reset hidden>Start over</button>
+            </div>
+            <p class="guide-next" data-guide-next hidden>
+                <span class="guide-next-label">UP NEXT</span>
+                <a href="#" data-guide-next-link></a>
+            </p>
+            <p class="guide-notice" data-guide-storage-warning hidden>
+                This browser is blocking saved data, so your ticks will be lost when you close the page.
+            </p>
+            <noscript>
+                <p class="guide-notice">Turn on JavaScript to save your progress between sessions.</p>
+            </noscript>
+        </section>
+
+        <div class="guide-days">
+            @foreach (var day in Model.Days)
+            {
+                <details class="guide-day" id="day-@day.Number" data-guide-day="@day.Number">
+                    <summary>
+                        <span class="guide-day-name">Day @day.Number</span>
+                        <span class="guide-day-theme">@day.Theme</span>
+                        <span class="guide-day-count" data-guide-day-count>0 / @day.Steps.Count</span>
+                    </summary>
+                    <ol class="guide-steps">
+                        @foreach (var step in day.Steps)
+                        {
+                            <li class="guide-step" id="step-@step.Id">
+                                <input type="checkbox" id="step-check-@step.Id" data-guide-step="@step.Id"
+                                       data-guide-title="@step.Title" autocomplete="off" />
+                                <div class="guide-step-body">
+                                    <label for="step-check-@step.Id">@step.Title</label>
+                                    @* Kept on one line: line breaks here would add a space before punctuation that follows a link. *@
+                                    <p>@foreach (var segment in step.Instructions) { if (segment.ItemName is null) {<text>@segment.Text</text>} else {<a asp-page="/Item" asp-route-name="@segment.ItemName">@segment.Text</a>} }</p>
+                                </div>
+                            </li>
+                        }
+                    </ol>
+                </details>
+            }
+        </div>
+
+        <p class="guide-finished" data-guide-finished hidden>
+            You made it through the first five days. From here,
+            <a asp-page="/ReverseLookup">see what else you can craft</a>.
+        </p>
+    }
+</div>
+
+@section Scripts {
+    <script src="~/js/guide.js" asp-append-version="true"></script>
+}

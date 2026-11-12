@@ -483,3 +483,286 @@ a.tool-card:hover {
     font-size: 0.52rem;
   }
 }
+/* ---------- First 5 Days plan (Pages/Guide.cshtml) ---------- */
+
+.guide-page {
+  --forest: #233d32;
+  --moss: #718268;
+  --paper: #f5f2e9;
+  --ink: #26342d;
+  --muted: #5f6a62;
+  --line: #d9d6c9;
+  --accent: #a8742f;
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 1.25rem 0 2.5rem;
+  color: var(--ink);
+}
+
+.guide-eyebrow {
+  margin-bottom: 0.5rem;
+  color: var(--moss);
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+}
+
+.guide-header h1 {
+  margin: 0 0 0.6rem;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(2rem, 5vw, 2.8rem);
+  font-weight: 400;
+  letter-spacing: -0.03em;
+}
+
+.guide-lead {
+  max-width: 34rem;
+  margin-bottom: 1.5rem;
+  color: var(--muted);
+  line-height: 1.6;
+}
+
+/* Stays visible while scrolling so progress and the next step are always in view. */
+.guide-status {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  margin: 0 -0.75rem 1.25rem;
+  padding: 0.85rem 0.75rem;
+  border-bottom: 1px solid var(--line);
+  background: #fff;
+}
+
+.guide-progress {
+  height: 10px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: #e6e3d6;
+}
+
+.guide-progress-fill {
+  display: block;
+  width: 0;
+  height: 100%;
+  border-radius: 999px;
+  background: var(--forest);
+  transition: width 0.25s ease;
+}
+
+.guide-status-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  min-height: 2.75rem;
+}
+
+.guide-progress-text {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.9rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.guide-reset {
+  min-height: 2.75rem;
+  padding: 0 0.75rem;
+  border: 0;
+  border-radius: 4px;
+  background: transparent;
+  color: var(--muted);
+  font-size: 0.9rem;
+  text-decoration: underline;
+}
+
+.guide-reset:hover,
+.guide-reset:focus-visible {
+  background: var(--paper);
+  color: var(--ink);
+}
+
+.guide-next {
+  display: flex;
+  align-items: baseline;
+  gap: 0.6rem;
+  margin: 0;
+}
+
+.guide-next-label {
+  flex: none;
+  color: var(--accent);
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+}
+
+.guide-next a {
+  color: var(--forest);
+  font-weight: 600;
+}
+
+.guide-notice {
+  margin: 0.5rem 0 0;
+  padding: 0.6rem 0.75rem;
+  border-left: 3px solid var(--accent);
+  background: var(--paper);
+  font-size: 0.9rem;
+}
+
+.guide-day {
+  margin-bottom: 0.75rem;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: #fff;
+  /* Keeps a jumped-to step clear of the sticky progress bar. */
+  scroll-margin-top: 8rem;
+}
+
+.guide-day > summary {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  min-height: 3.5rem;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  background: var(--paper);
+  cursor: pointer;
+  list-style: none;
+}
+
+.guide-day > summary::-webkit-details-marker {
+  display: none;
+}
+
+.guide-day > summary::before {
+  content: "›";
+  flex: none;
+  width: 1rem;
+  color: var(--moss);
+  font-size: 1.4rem;
+  line-height: 1;
+  transition: transform 0.15s ease;
+}
+
+.guide-day[open] > summary::before {
+  transform: rotate(90deg);
+}
+
+.guide-day[open] > summary {
+  border-bottom: 1px solid var(--line);
+  border-radius: 6px 6px 0 0;
+}
+
+.guide-day-name {
+  flex: none;
+  font-weight: 700;
+}
+
+.guide-day-theme {
+  flex: 1;
+  min-width: 0;
+  color: var(--muted);
+}
+
+.guide-day-count {
+  flex: none;
+  padding: 0.15rem 0.6rem;
+  border-radius: 999px;
+  background: #fff;
+  color: var(--muted);
+  font-size: 0.85rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.guide-day.is-complete .guide-day-count {
+  background: var(--forest);
+  color: #fff;
+}
+
+.guide-steps {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.guide-step {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 0 0.9rem;
+  padding: 0.9rem 1rem;
+  scroll-margin-top: 8rem;
+}
+
+.guide-step + .guide-step {
+  border-top: 1px solid #eceadf;
+}
+
+.guide-step input[type="checkbox"] {
+  width: 1.75rem;
+  height: 1.75rem;
+  margin: 0.1rem 0 0;
+  accent-color: var(--forest);
+  cursor: pointer;
+}
+
+.guide-step label {
+  display: block;
+  padding: 0.2rem 0;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.guide-step p {
+  margin: 0.15rem 0 0;
+  color: var(--muted);
+  line-height: 1.55;
+}
+
+.guide-step p a {
+  color: var(--forest);
+  font-weight: 600;
+}
+
+.guide-step.is-done label {
+  color: var(--muted);
+  font-weight: 400;
+  text-decoration: line-through;
+}
+
+.guide-step.is-done p {
+  display: none;
+}
+
+.guide-finished {
+  margin-top: 1.25rem;
+  padding: 1rem;
+  border-radius: 6px;
+  background: var(--forest);
+  color: #f8f6ed;
+}
+
+.guide-finished a {
+  color: #e2c794;
+}
+
+@media (max-width: 575.98px) {
+  .guide-day-theme {
+    display: none;
+  }
+
+  .guide-day-name {
+    flex: 1;
+  }
+
+  .guide-next {
+    flex-direction: column;
+    gap: 0.1rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .guide-progress-fill,
+  .guide-day > summary::before {
+    transition: none;
+  }
+}
