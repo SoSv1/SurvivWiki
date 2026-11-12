@@ -178,7 +178,13 @@
                             <ul class="contribute-recipe">
                                 @foreach (var ingredient in Model.PreviewIngredients)
                                 {
-                                    <li><span>@ingredient.Name</span><span>× @ingredient.Quantity</span></li>
+                                    <li>
+                                        <span class="item-with-icon">
+                                            <partial name="_ItemIcon" model="new ItemIconModel(ingredient.Name, 32)" />
+                                            @ingredient.Name
+                                        </span>
+                                        <span>× @ingredient.Quantity</span>
+                                    </li>
                                 }
                             </ul>
                         }

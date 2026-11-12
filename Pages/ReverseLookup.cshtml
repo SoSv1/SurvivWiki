@@ -29,7 +29,8 @@
                                        value="@material.Id" 
                                        id="item_@material.Id"
                                        @(Model.SelectedItemIds.Contains(material.Id) ? "checked" : "")>
-                                <label class="form-check-label user-select-none" for="item_@material.Id">
+                                <label class="form-check-label user-select-none item-with-icon" for="item_@material.Id">
+                                    <partial name="_ItemIcon" model="new ItemIconModel(material.Name, 28)" />
                                     @material.Name
                                 </label>
                             </div>
@@ -55,7 +56,8 @@
                                 <div class="card h-100 border-success shadow-sm">
                                     <div class="card-body">
                                         <h5 class="card-title text-success">
-                                            <a asp-page="/Item" asp-route-name="@item.Name" class="text-decoration-none text-success">
+                                            <a asp-page="/Item" asp-route-name="@item.Name" class="item-with-icon text-decoration-none text-success">
+                                                <partial name="_ItemIcon" model="new ItemIconModel(item.Name, 40)" />
                                                 @item.Name
                                             </a>
                                         </h5>
@@ -66,7 +68,10 @@
                                         <ul class="list-unstyled small mb-0">
                                             @foreach (var ingredient in item.CraftedFrom)
                                             {
-                                                <li>- @ingredient.IngredientItem.Name (x @ingredient.QuantityRequired)</li>
+                                                <li class="item-with-icon d-flex mb-1">
+                                                    <partial name="_ItemIcon" model="new ItemIconModel(ingredient.IngredientItem.Name, 24)" />
+                                                    @ingredient.IngredientItem.Name (x @ingredient.QuantityRequired)
+                                                </li>
                                             }
                                         </ul>
                                     </div>

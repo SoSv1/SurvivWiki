@@ -65,7 +65,10 @@
                         @foreach (var ingredient in item.CraftedFrom)
                         {
                             <li>
-                                <a asp-page="/Item" asp-route-name="@ingredient.IngredientItem.Name">@ingredient.IngredientItem.Name</a>
+                                <a class="item-with-icon" asp-page="/Item" asp-route-name="@ingredient.IngredientItem.Name">
+                                    <partial name="_ItemIcon" model="new ItemIconModel(ingredient.IngredientItem.Name, 32)" />
+                                    @ingredient.IngredientItem.Name
+                                </a>
                                 <span>× @ingredient.QuantityRequired</span>
                             </li>
                         }

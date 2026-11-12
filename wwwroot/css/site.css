@@ -1277,3 +1277,44 @@ a.tool-card:hover {
 .review-status.is-rejected {
   color: var(--danger);
 }
+
+
+/* ---------- Item icons (Pages/Shared/_ItemIcon.cshtml) ---------- */
+
+.item-icon {
+  flex: none;
+  object-fit: contain;
+  vertical-align: middle;
+}
+
+/* Shown when the wiki has no icon for an item, e.g. a page a contributor just added. */
+.item-icon-missing {
+  display: inline-grid;
+  place-items: center;
+  border-radius: 4px;
+  background: #eceadf;
+  color: #788078;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.item-with-icon {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.item-icon-frame {
+  display: inline-flex;
+  padding: 4px;
+  border-radius: 8px;
+  background: #fff;
+}
+
+.guide-item-link .item-icon {
+  margin: -0.2rem 0.2rem 0 0;
+}
+
+.contribute-recipe li {
+  align-items: center;
+}

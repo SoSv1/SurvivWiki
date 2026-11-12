@@ -65,7 +65,7 @@
                                 <div class="guide-step-body">
                                     <label for="step-check-@step.Id">@step.Title</label>
                                     @* Kept on one line: line breaks here would add a space before punctuation that follows a link. *@
-                                    <p>@foreach (var segment in step.Instructions) { if (segment.ItemName is null) {<text>@segment.Text</text>} else {<a asp-page="/Item" asp-route-name="@segment.ItemName">@segment.Text</a>} }</p>
+                                    <p>@foreach (var segment in step.Instructions) { if (segment.ItemName is null) {<text>@segment.Text</text>} else {<a class="guide-item-link" asp-page="/Item" asp-route-name="@segment.ItemName"><partial name="_ItemIcon" model="new ItemIconModel(segment.ItemName, 22)" />@segment.Text</a>} }</p>
                                 </div>
                             </li>
                         }

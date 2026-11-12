@@ -9,7 +9,10 @@
         <div class="col-md-8">
             <div class="card shadow-sm border-primary">
                 <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
-                    <h2 class="h4 mb-0">@Model.CurrentItem!.Name</h2>
+                    <div class="d-flex align-items-center gap-3">
+                        <span class="item-icon-frame"><partial name="_ItemIcon" model="new ItemIconModel(Model.CurrentItem!.Name, 64)" /></span>
+                        <h2 class="h4 mb-0">@Model.CurrentItem!.Name</h2>
+                    </div>
                     <span class="badge bg-light text-primary">@Model.CurrentItem.Category</span>
                 </div>
                 <div class="card-body">
@@ -32,7 +35,8 @@
                             {
                                 <li class="list-group-item d-flex justify-content-between align-items-center">
                                     <!-- This makes the ingredients clickable! -->
-                                    <a asp-page="/Item" asp-route-name="@ingredient.IngredientItem.Name" class="text-decoration-none fw-bold">
+                                    <a asp-page="/Item" asp-route-name="@ingredient.IngredientItem.Name" class="item-with-icon text-decoration-none fw-bold">
+                                        <partial name="_ItemIcon" model="new ItemIconModel(ingredient.IngredientItem.Name, 40)" />
                                         @ingredient.IngredientItem.Name
                                     </a>
                                     <span class="badge bg-secondary rounded-pill">
@@ -52,6 +56,7 @@
                         <p class="text-muted small mt-4 mb-0">
                             Source: <a href="@Model.CurrentItem.SourceUrl">Don't Starve Wiki</a>,
                             licensed under <a href="https://creativecommons.org/licenses/by-sa/3.0/">CC BY-SA 3.0</a>.
+                            Item artwork © Klei Entertainment.
                         </p>
                     }
                 </div>
