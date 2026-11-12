@@ -1,0 +1,124 @@
+@page
+@using SurviveWiki.Models
+@model SurviveWiki.Pages.ReviewModel
+@{
+    ViewData["Title"] = "Review queue";
+}
+
+<div class="contribute-page review-page">
+    <header class="contribute-header">
+        <p class="contribute-eyebrow">FOR MODERATORS</p>
+        <h1>Review queue</h1>
+        <p class="contribute-lead">
+            New pages from contributors wait here. Approve the correct ones so players can find them.
+        </p>
+    </header>
+
+    <p class="review-note">
+        Moderator sign-in is under development. In this prototype anyone can open this page.
+    </p>
+
+    @if (!string.IsNullOrEmpty(Model.Notice))
+    {
+        <div class="review-notice" role="status">
+            <span>@Model.Notice</span>
+            @if (Model.UndoItemId is int undoId)
+            {
+                <form method="post" asp-page-handler="Reopen" asp-route-id="@undoId">
+                    <button type="submit" class="review-undo">Undo</button>
+                </form>
+            }
+        </div>
+    }
+
+    <section aria-labelledby="pending-heading">
+        <h2 id="pending-heading" class="review-heading">
+            Waiting for review <span class="review-count">@Model.Pending.Count</span>
+        </h2>
+
+        @if (!Model.Pending.Any())
+        {
+            <p class="review-empty">
+                Nothing is waiting. New pages appear here when a contributor
+                <a asp-page="/Contribute">adds one</a>.
+            </p>
+        }
+
+        @foreach (var item in Model.Pending)
+        {
+            <article class="contribute-card review-card">
+                <div class="contribute-card-top">
+                    <h3 class="review-card-title">@item.Name</h3>
+                    <span class="contribute-badge">@(item.Category == "Item" ? "Other item" : item.Category)</span>
+                </div>
+                <p>@item.Description</p>
+
+                @if (!string.IsNullOrWhiteSpace(item.BeginnerTip))
+                {
+                    <p class="contribute-tip"><strong>Beginner tip:</strong> @item.BeginnerTip</p>
+                }
+
+                <p class="contribute-hint">Crafted at: @(item.CraftingStation == "None" ? "No station – crafted by hand" : item.CraftingStation)</p>
+                @if (item.CraftedFrom.Any())
+                {
+                    <ul class="contribute-recipe">
+                        @foreach (var ingredient in item.CraftedFrom)
+                        {
+                            <li>
+                                <a class="item-with-icon" asp-page="/Item" asp-route-name="@ingredient.IngredientItem.Name">
+                                    <partial name="_ItemIcon" model="new ItemIconModel(ingredient.IngredientItem.Name, 32)" />
+                                    @ingredient.IngredientItem.Name
+                                </a>
+                                <span>× @ingredient.QuantityRequired</span>
+                            </li>
+                        }
+                    </ul>
+                }
+                else
+                {
+                    <p>No recipe: the contributor marked this item as not craftable.</p>
+                }
+
+                <div class="contribute-actions review-actions">
+                    <form method="post" asp-page-handler="Approve" asp-route-id="@item.Id">
+                        <button type="submit" class="contribute-primary" aria-label="Approve @item.Name">Approve</button>
+                    </form>
+                    <form method="post" asp-page-handler="Reject" asp-route-id="@item.Id">
+                        <button type="submit" class="contribute-secondary review-reject" aria-label="Reject @item.Name">Reject</button>
+                    </form>
+                </div>
+            </article>
+        }
+    </section>
+
+    @if (Model.Decided.Any())
+    {
+        <section aria-labelledby="decided-heading">
+            <h2 id="decided-heading" class="review-heading">Already reviewed</h2>
+            <ul class="review-decided">
+                @foreach (var item in Model.Decided)
+                {
+                    var approved = item.Status == PageStatus.Approved;
+                    <li>
+                        <span class="review-decided-name">
+                            @if (approved)
+                            {
+                                <a asp-page="/Item" asp-route-name="@item.Name">@item.Name</a>
+                            }
+                            else
+                            {
+                                @item.Name
+                            }
+                        </span>
+                        <span class="review-status @(approved ? "is-approved" : "is-rejected")">
+                            @(approved ? "Approved" : "Rejected")
+                        </span>
+                        <form method="post" asp-page-handler="Reopen" asp-route-id="@item.Id">
+                            <button type="submit" class="review-undo" aria-label="Move @item.Name back to the queue">Back to queue</button>
+                        </form>
+                    </li>
+                }
+            </ul>
+        </section>
+    }
+</div>

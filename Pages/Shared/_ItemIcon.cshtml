@@ -1,0 +1,15 @@
+@model ItemIconModel
+@inject SurviveWiki.Services.ItemImages Images
+@*
+    An item's icon, or a neutral placeholder when the wiki has none.
+    The icon is always shown next to the item's name, so it is hidden from
+    screen readers (empty alt) to avoid reading the name twice.
+*@
+@{
+    var url = Images.UrlFor(Model.Name);
+    var initial = string.IsNullOrWhiteSpace(Model.Name) ? "?" : Model.Name.Trim()[..1].ToUpperInvariant();
+}
+@if (url is not null)
+{<img class="item-icon" src="@url" alt="" width="@Model.Size" height="@Model.Size" loading="lazy" decoding="async" />}
+else
+{<span class="item-icon item-icon-missing" style="width:@(Model.Size)px;height:@(Model.Size)px;font-size:@(Model.Size / 2)px" aria-hidden="true">@initial</span>}
