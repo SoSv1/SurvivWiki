@@ -101,7 +101,7 @@ public static class DbInitializer
             }
 
             item.Category = wikiItem.Category;
-            item.Description = wikiItem.Description;
+            item.Description = WikiText.Clean(wikiItem.Description);
             item.BeginnerTip = wikiItem.BeginnerTip;
             item.CraftingStation = wikiItem.CraftingStation;
             item.SourceUrl = wikiItem.SourceUrl;

@@ -16,7 +16,14 @@
                     <span class="badge bg-light text-primary">@Model.CurrentItem.Category</span>
                 </div>
                 <div class="card-body">
-                    <p class="lead">@Model.CurrentItem.Description</p>
+                    @if (string.IsNullOrWhiteSpace(Model.CurrentItem.Description))
+                    {
+                        <p class="text-muted">No description has been written for this item yet.</p>
+                    }
+                    else
+                    {
+                        <p class="lead">@Model.CurrentItem.Description</p>
+                    }
                     
                     @if (!string.IsNullOrWhiteSpace(Model.CurrentItem.BeginnerTip))
                     {

@@ -1,0 +1,59 @@
+{
+  "note": "Task N2: beginners search for a problem ('night', 'hungry'), not an item name. Each topic maps such words to a short answer and the items that solve it. Avoid keywords that are also item names, because an exact item name opens that item directly.",
+  "topics": [
+    {
+      "keywords": ["night", "dark", "darkness", "dusk", "light", "fire", "first night"],
+      "title": "Night is coming?",
+      "advice": "Standing in total darkness kills you. Build a light before the screen goes black and stay beside it until morning.",
+      "items": ["Campfire", "Torch"]
+    },
+    {
+      "keywords": ["chop", "tree", "trees", "wood", "lumber"],
+      "title": "Need wood?",
+      "advice": "Chop trees with an Axe to get Logs. You need Logs for fires and most buildings.",
+      "items": ["Axe"]
+    },
+    {
+      "keywords": ["mine", "mining", "rock", "stone", "stones"],
+      "title": "Need rocks or flint?",
+      "advice": "Mine boulders with a Pickaxe. Boulders with yellow veins also drop gold.",
+      "items": ["Pickaxe"]
+    },
+    {
+      "keywords": ["hungry", "hunger", "eat", "starving", "starve", "food"],
+      "title": "Getting hungry?",
+      "advice": "Pick berries and carrots as you explore. Set Traps on rabbit holes for meat, and cook food over a fire.",
+      "items": ["Berries", "Carrot", "Trap"]
+    },
+    {
+      "keywords": ["cold", "winter", "freeze", "freezing", "warm"],
+      "title": "Getting cold?",
+      "advice": "Winter starts around day 21. Stand by a fire to warm up, and carry a heated Thermal Stone when you travel.",
+      "items": ["Thermal Stone", "Campfire"]
+    },
+    {
+      "keywords": ["fight", "attack", "attacked", "monster", "monsters", "weapon", "armor", "armour", "hounds"],
+      "title": "Under attack?",
+      "advice": "Keep a weapon and armour in your inventory. If you have neither, run: most creatures give up the chase.",
+      "items": ["Spear", "Log Suit"]
+    },
+    {
+      "keywords": ["hurt", "health", "heal", "dying", "die", "dead"],
+      "title": "Low on health?",
+      "advice": "Health does not come back on its own. Use a healing item, or eat cooked food for a small boost.",
+      "items": ["Healing Salve", "Honey Poultice"]
+    },
+    {
+      "keywords": ["carry", "inventory", "bag", "storage", "store", "full"],
+      "title": "Inventory full?",
+      "advice": "A Backpack adds slots you carry with you. A Chest stores what you do not need right now at your camp.",
+      "items": ["Backpack", "Chest"]
+    },
+    {
+      "keywords": ["unlock", "science", "recipes"],
+      "title": "Want more recipes?",
+      "advice": "Stand next to a Science Machine to unlock new things to craft.",
+      "items": ["Science Machine"]
+    }
+  ]
+}

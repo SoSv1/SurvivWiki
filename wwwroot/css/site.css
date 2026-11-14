@@ -1886,3 +1886,129 @@ a.tool-card:hover {
     transition-duration: 0.01ms !important;
   }
 }
+
+
+/* ---------- Stage 2 polish ---------- */
+
+/* The home hero is dark, so its headline must not take the dark page-heading colour. */
+.wiki-main .home-hero h1 {
+  color: #f8f6ed;
+}
+
+/* Nav labels stay on one line; below 992px the nav collapses into the menu button instead. */
+.wiki-nav .nav-link {
+  white-space: nowrap;
+}
+
+.wiki-nav .navbar-toggler {
+  border-color: rgb(241 232 212 / 45%);
+}
+
+.wiki-nav .navbar-toggler-icon {
+  filter: invert(1) brightness(1.6);
+}
+
+/* ---------- Search: quick answers (task N2) ---------- */
+
+.search-topic {
+  margin-bottom: 1.75rem;
+  padding: 1.25rem;
+  border: 1px solid var(--wiki-line);
+  border-left: 5px solid var(--wiki-ember);
+  border-radius: 6px;
+  background: var(--wiki-paper-light);
+}
+
+.search-topic-eyebrow {
+  margin-bottom: 0.35rem;
+  color: var(--wiki-ember);
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+}
+
+.search-topic h3 {
+  margin: 0 0 0.4rem;
+  font-size: 1.5rem;
+}
+
+.search-topic-advice {
+  margin-bottom: 1rem;
+  font-size: 1.05rem;
+  line-height: 1.5;
+}
+
+.search-topic-items {
+  display: grid;
+  gap: 0.6rem;
+}
+
+.wiki-main a.search-topic-item {
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+  min-height: 4.5rem;
+  padding: 0.6rem 0.9rem;
+  border: 1px solid var(--wiki-line);
+  border-radius: 6px;
+  background: #fffdf6;
+  color: var(--wiki-ink);
+  text-decoration: none;
+}
+
+.wiki-main a.search-topic-item:hover,
+.wiki-main a.search-topic-item:focus-visible {
+  border-color: var(--wiki-ember);
+  color: var(--wiki-ink);
+}
+
+.search-topic-item-body {
+  display: grid;
+  gap: 0.25rem;
+  min-width: 0;
+}
+
+.search-topic-item-name {
+  font-size: 1.1rem;
+  font-weight: 700;
+}
+
+.search-topic-recipe {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem 0.9rem;
+  color: #5c594f;
+  font-size: 0.95rem;
+}
+
+.search-topic-ingredient {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  white-space: nowrap;
+}
+
+.search-list-heading {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-bottom: 0.75rem;
+  font-size: 1.1rem;
+}
+
+.search-list-count {
+  padding: 0.1rem 0.6rem;
+  border-radius: 999px;
+  background: var(--wiki-paper);
+  font-family: Arial, sans-serif;
+  font-size: 0.85rem;
+}
+
+/* Long imported descriptions are cut to three lines so the list stays scannable. */
+.search-result-text {
+  display: -webkit-box;
+  overflow: hidden;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+  line-clamp: 3;
+}
