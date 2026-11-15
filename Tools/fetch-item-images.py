@@ -1,4 +1,5 @@
-"""Download item icons from the Don't Starve Wiki for the items in Data/wiki-items.json.
+"""Download item icons from the Don't Starve Wiki for the items in Data/wiki-items.json
+and Data/wiki-items-extra.json.
 
 Run from the project folder:
 
@@ -31,7 +32,7 @@ ICON_WIDTH = 128         # larger originals are scaled down by the wiki
 PAUSE_SECONDS = 0.05     # be polite to the wiki
 
 ROOT = Path(__file__).resolve().parent.parent
-CATALOG = ROOT / "Data" / "wiki-items.json"
+CATALOGS = [ROOT / "Data" / "wiki-items.json", ROOT / "Data" / "wiki-items-extra.json"]
 OUTPUT = ROOT / "wwwroot" / "images" / "items"
 MANIFEST = OUTPUT / "manifest.json"
 
@@ -80,7 +81,12 @@ def file_name_for(item_name):
 
 
 def main():
-    names = [item["name"] for item in json.loads(CATALOG.read_text(encoding="utf-8"))["items"]]
+    names = []
+    for catalog in CATALOGS:
+        if catalog.exists():
+            for item in json.loads(catalog.read_text(encoding="utf-8"))["items"]:
+                if item["name"] not in names:
+                    names.append(item["name"])
     OUTPUT.mkdir(parents=True, exist_ok=True)
 
     print(f"Looking up icons for {len(names)} items...")

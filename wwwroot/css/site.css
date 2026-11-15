@@ -1886,3 +1886,1690 @@ a.tool-card:hover {
     transition-duration: 0.01ms !important;
   }
 }
+
+
+/* ---------- Stage 2 polish ---------- */
+
+/* The home hero is dark, so its headline must not take the dark page-heading colour. */
+.wiki-main .home-hero h1 {
+  color: #f8f6ed;
+}
+
+/* Nav labels stay on one line; below 992px the nav collapses into the menu button instead. */
+.wiki-nav .nav-link {
+  white-space: nowrap;
+}
+
+.wiki-nav .navbar-toggler {
+  border-color: rgb(241 232 212 / 45%);
+}
+
+.wiki-nav .navbar-toggler-icon {
+  filter: invert(1) brightness(1.6);
+}
+
+/* ---------- Search: quick answers (task N2) ---------- */
+
+.search-topic {
+  margin-bottom: 1.75rem;
+  padding: 1.25rem;
+  border: 1px solid var(--wiki-line);
+  border-left: 5px solid var(--wiki-ember);
+  border-radius: 6px;
+  background: var(--wiki-paper-light);
+}
+
+.search-topic-eyebrow {
+  margin-bottom: 0.35rem;
+  color: var(--wiki-ember);
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+}
+
+.search-topic h3 {
+  margin: 0 0 0.4rem;
+  font-size: 1.5rem;
+}
+
+.search-topic-advice {
+  margin-bottom: 1rem;
+  font-size: 1.05rem;
+  line-height: 1.5;
+}
+
+.search-topic-items {
+  display: grid;
+  gap: 0.6rem;
+}
+
+.wiki-main a.search-topic-item {
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+  min-height: 4.5rem;
+  padding: 0.6rem 0.9rem;
+  border: 1px solid var(--wiki-line);
+  border-radius: 6px;
+  background: #fffdf6;
+  color: var(--wiki-ink);
+  text-decoration: none;
+}
+
+.wiki-main a.search-topic-item:hover,
+.wiki-main a.search-topic-item:focus-visible {
+  border-color: var(--wiki-ember);
+  color: var(--wiki-ink);
+}
+
+.search-topic-item-body {
+  display: grid;
+  gap: 0.25rem;
+  min-width: 0;
+}
+
+.search-topic-item-name {
+  font-size: 1.1rem;
+  font-weight: 700;
+}
+
+.search-topic-recipe {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem 0.9rem;
+  color: #5c594f;
+  font-size: 0.95rem;
+}
+
+.search-topic-ingredient {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  white-space: nowrap;
+}
+
+.search-list-heading {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-bottom: 0.75rem;
+  font-size: 1.1rem;
+}
+
+.search-list-count {
+  padding: 0.1rem 0.6rem;
+  border-radius: 999px;
+  background: var(--wiki-paper);
+  font-family: Arial, sans-serif;
+  font-size: 0.85rem;
+}
+
+/* Long imported descriptions are cut to three lines so the list stays scannable. */
+.search-result-text {
+  display: -webkit-box;
+  overflow: hidden;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+  line-clamp: 3;
+}
+
+
+/* ---------- Item page: one item at a glance (Pages/Item.cshtml) ---------- */
+
+.item-page {
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 0.5rem 0 1.5rem;
+}
+
+.item-head {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1.25rem;
+}
+
+.item-head .item-icon-frame {
+  flex: none;
+  border: 1px solid var(--wiki-line);
+  background: #fffdf6;
+}
+
+.item-category {
+  margin: 0 0 0.15rem;
+  color: var(--wiki-ember);
+  font-family: Arial, sans-serif;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.item-head h1 {
+  margin: 0;
+  font-size: clamp(1.8rem, 5vw, 2.5rem);
+  overflow-wrap: anywhere;
+}
+
+.item-does {
+  margin-bottom: 1rem;
+  font-size: 1.2rem;
+  line-height: 1.55;
+}
+
+.item-does-missing {
+  color: #6f6b60;
+  font-size: 1rem;
+}
+
+.item-tip {
+  margin-bottom: 1.5rem;
+  padding: 0.9rem 1rem;
+  border-left: 5px solid var(--wiki-ember);
+  border-radius: 4px;
+  background: #fffdf6;
+  font-size: 1.05rem;
+  line-height: 1.5;
+}
+
+.item-tip-label {
+  display: block;
+  margin-bottom: 0.2rem;
+  color: var(--wiki-ember);
+  font-family: Arial, sans-serif;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+}
+
+.item-columns {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.item-panel {
+  padding: 1.1rem;
+  border: 1px solid var(--wiki-line);
+  border-radius: 6px;
+  background: var(--wiki-paper-light);
+}
+
+.item-panel h2 {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 0 0 0.6rem;
+  font-size: 1.15rem;
+}
+
+.item-count {
+  padding: 0.05rem 0.55rem;
+  border-radius: 999px;
+  background: var(--wiki-paper);
+  font-family: Arial, sans-serif;
+  font-size: 0.8rem;
+}
+
+.item-station {
+  margin-bottom: 0.6rem;
+  color: #5c594f;
+}
+
+.item-recipe,
+.item-used {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.item-recipe li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  min-height: 3.25rem;
+  border-top: 1px solid var(--wiki-line);
+}
+
+.item-recipe a,
+.item-used a {
+  font-weight: 700;
+}
+
+.item-quantity {
+  flex: none;
+  font-family: Arial, sans-serif;
+  font-size: 1.15rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+.item-used {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
+  gap: 0.15rem 0.75rem;
+}
+
+.item-used li {
+  display: flex;
+  align-items: center;
+  min-height: 2.75rem;
+}
+
+.item-more {
+  margin: 0.6rem 0 0;
+  color: #5c594f;
+  font-size: 0.95rem;
+}
+
+.item-source {
+  margin: 1.25rem 0 0;
+  color: #6f6b60;
+  font-size: 0.85rem;
+}
+
+@media (max-width: 767.98px) {
+  .item-columns {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ---------- What can I craft? (Pages/ReverseLookup.cshtml) ---------- */
+
+/* This page uses the whole window so the item list can sit at the far left. */
+.wiki-wide {
+  max-width: 1500px;
+  padding-inline: clamp(0.5rem, 1.5vw, 1.5rem);
+}
+
+.lookup {
+  display: grid;
+  grid-template-columns: 300px minmax(0, 1fr);
+  align-items: start;
+  gap: 1.5rem;
+}
+
+.lookup-pack {
+  position: sticky;
+  top: 0.75rem;
+  max-height: calc(100vh - 1.5rem);
+  overflow-y: auto;
+  padding: 1rem;
+  border: 1px solid var(--wiki-line);
+  border-radius: 6px;
+  background: var(--wiki-paper-light);
+}
+
+.wiki-main .lookup-pack-title {
+  margin: 0;
+  font-size: 1.25rem;
+}
+
+.lookup-pack-hint {
+  margin: 0.1rem 0 0.7rem;
+  color: #5c594f;
+  font-size: 0.9rem;
+}
+
+.lookup-filter {
+  min-height: 2.75rem;
+  margin-bottom: 0.75rem;
+}
+
+.lookup-filter-empty {
+  color: #5c594f;
+  font-size: 0.9rem;
+}
+
+.lookup-group {
+  border-top: 1px solid var(--wiki-line);
+}
+
+.lookup-group > summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 2.75rem;
+  font-family: Arial, sans-serif;
+  font-size: 0.85rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.lookup-group-count {
+  padding: 0.05rem 0.5rem;
+  border-radius: 999px;
+  background: var(--wiki-paper);
+  font-size: 0.75rem;
+}
+
+.lookup-chips {
+  display: grid;
+  gap: 0.3rem;
+  padding-bottom: 0.75rem;
+}
+
+.lookup-chip {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  width: 100%;
+  min-height: 2.75rem;
+  padding: 0.3rem 0.6rem;
+  border: 1px solid var(--wiki-line);
+  border-radius: 6px;
+  background: #fffdf6;
+  color: var(--wiki-ink);
+  font-weight: 600;
+  text-align: left;
+}
+
+.lookup-chip:hover {
+  border-color: var(--wiki-moss);
+}
+
+.lookup-chip[aria-pressed="true"] {
+  border-color: var(--wiki-moss);
+  background: var(--wiki-moss);
+  color: #fffdf6;
+}
+
+.lookup-chip[aria-pressed="true"]::after {
+  content: "\2713";
+  margin-left: auto;
+  font-family: Arial, sans-serif;
+}
+
+.lookup-header h1 {
+  margin: 0;
+  font-size: clamp(1.7rem, 3vw, 2.3rem);
+}
+
+.lookup-status {
+  margin: 0.2rem 0 1rem;
+  color: #5c594f;
+  font-size: 1.05rem;
+}
+
+.lookup-selected {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem 0.75rem;
+  margin-bottom: 1.25rem;
+  padding: 0.6rem 0.75rem;
+  border: 1px solid var(--wiki-line);
+  border-radius: 6px;
+  background: var(--wiki-paper-light);
+}
+
+.lookup-selected-label {
+  color: var(--wiki-ember);
+  font-family: Arial, sans-serif;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+}
+
+.lookup-selected-chips {
+  display: flex;
+  flex: 1;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.lookup-selected-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  min-height: 2.5rem;
+  padding: 0.2rem 0.6rem;
+  border: 1px solid var(--wiki-moss);
+  border-radius: 999px;
+  background: #fffdf6;
+  color: var(--wiki-ink);
+  font-weight: 600;
+}
+
+.lookup-selected-chip:hover {
+  border-color: var(--wiki-ember);
+}
+
+.lookup-selected-remove {
+  color: var(--wiki-ember);
+  font-family: Arial, sans-serif;
+  font-size: 1.1rem;
+  line-height: 1;
+}
+
+.lookup-clear {
+  min-height: 2.5rem;
+  padding: 0 0.6rem;
+  border: 0;
+  background: transparent;
+  color: #5c594f;
+  text-decoration: underline;
+}
+
+.lookup-empty {
+  padding: 2rem 1.5rem;
+  border: 1px dashed var(--wiki-line);
+  border-radius: 6px;
+  text-align: center;
+}
+
+.lookup-empty-title {
+  margin-bottom: 0.3rem;
+  font-size: 1.3rem;
+  font-weight: 700;
+}
+
+.wiki-main .lookup-section-title {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin: 0;
+  font-size: 1.35rem;
+}
+
+.lookup-section-count {
+  padding: 0.05rem 0.6rem;
+  border-radius: 999px;
+  background: var(--wiki-moss);
+  color: #fffdf6;
+  font-family: Arial, sans-serif;
+  font-size: 0.9rem;
+}
+
+.lookup-section-note {
+  margin: 0.15rem 0 0.75rem;
+  color: #5c594f;
+  font-size: 0.95rem;
+}
+
+.lookup-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
+  gap: 0.9rem;
+  margin-bottom: 2rem;
+}
+
+.lookup-none {
+  grid-column: 1 / -1;
+  margin: 0;
+  color: #5c594f;
+}
+
+.lookup-card {
+  display: flex;
+  flex-direction: column;
+  padding: 1rem;
+  border: 1px solid var(--wiki-line);
+  border-top: 4px solid var(--wiki-moss);
+  border-radius: 6px;
+  background: #fffdf6;
+}
+
+.lookup-card.is-almost {
+  border-top-color: var(--wiki-gold);
+}
+
+.lookup-card-top {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  margin-bottom: 0.6rem;
+}
+
+.lookup-card-heading {
+  display: grid;
+  gap: 0.2rem;
+  min-width: 0;
+}
+
+.wiki-main a.lookup-card-name {
+  font-size: 1.2rem;
+  font-weight: 700;
+  overflow-wrap: anywhere;
+}
+
+.lookup-card-station {
+  justify-self: start;
+  padding: 0.05rem 0.5rem;
+  border-radius: 999px;
+  background: var(--wiki-paper);
+  font-family: Arial, sans-serif;
+  font-size: 0.72rem;
+  font-weight: 700;
+}
+
+.lookup-card-station.is-hand {
+  background: var(--wiki-moss);
+  color: #fffdf6;
+}
+
+.lookup-card-does {
+  margin-bottom: 0.4rem;
+  line-height: 1.45;
+}
+
+.lookup-card-tip {
+  margin-bottom: 0.75rem;
+  padding-left: 0.6rem;
+  border-left: 3px solid var(--wiki-ember);
+  color: #4a473f;
+  font-size: 0.93rem;
+  line-height: 1.45;
+}
+
+.lookup-card-ingredients {
+  margin: auto 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.lookup-card-ingredients li {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-height: 2.2rem;
+  border-top: 1px solid var(--wiki-line);
+  font-size: 0.95rem;
+}
+
+.lookup-ingredient-name {
+  flex: 1;
+  min-width: 0;
+}
+
+.lookup-ingredient-quantity {
+  font-family: Arial, sans-serif;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+.lookup-ingredient-state {
+  width: 3.6rem;
+  font-family: Arial, sans-serif;
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-align: right;
+  text-transform: uppercase;
+}
+
+.lookup-card-ingredients .is-owned .lookup-ingredient-state {
+  color: #4f6b3c;
+}
+
+.lookup-card-ingredients .is-missing {
+  color: var(--wiki-ember);
+  font-weight: 700;
+}
+
+.lookup-card-add {
+  min-height: 2.75rem;
+  margin-top: 0.75rem;
+  border: 1px dashed var(--wiki-gold);
+  border-radius: 6px;
+  background: transparent;
+  color: var(--wiki-ink);
+  font-weight: 600;
+}
+
+.lookup-card-add:hover,
+.lookup-card-add:focus-visible {
+  background: var(--wiki-paper);
+}
+
+/* Phones and narrow second screens: the item list goes on top and scrolls on its own. */
+@media (max-width: 767.98px) {
+  .lookup {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .lookup-pack {
+    position: static;
+    max-height: 46vh;
+  }
+
+  .lookup-chips {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+
+/* ---------- Home hero artwork ----------
+   Don't Starve Together artwork (c) Klei Entertainment, wwwroot/images/home-hero.webp.
+   A dark fade on the left keeps the headline readable over the picture. */
+
+.home-hero.home-hero-art {
+  grid-template-columns: minmax(0, 1fr);
+  min-height: clamp(420px, 48vw, 560px);
+  background:
+    linear-gradient(90deg, rgb(20 22 18 / 94%) 0%, rgb(20 22 18 / 82%) 38%, rgb(20 22 18 / 30%) 72%, rgb(20 22 18 / 10%) 100%),
+    url("../images/home-hero.webp") center / cover no-repeat,
+    #1f2420;
+}
+
+.home-hero-art .hero-copy {
+  max-width: 560px;
+  text-shadow: 0 2px 10px rgb(0 0 0 / 55%);
+}
+
+.home-hero-art .home-search,
+.home-hero-art .home-search * {
+  text-shadow: none;
+}
+
+@media (max-width: 767.98px) {
+  /* On a phone the text covers the whole picture, so darken all of it. */
+  .home-hero.home-hero-art {
+    background:
+      linear-gradient(180deg, rgb(20 22 18 / 88%), rgb(20 22 18 / 78%)),
+      url("../images/home-hero.webp") center / cover no-repeat,
+      #1f2420;
+  }
+}
+
+/* ---------- First 5 Days: the road map (Pages/Guide.cshtml) ---------- */
+
+.trail-page {
+  --night: #1d211c;
+  --night-soft: #2a3028;
+  --road: #cfc4a6;
+  --gold: #e0ab45;
+  --ember: #b5523d;
+  --moss: #7c8f5a;
+  --paper: #f7f2e5;
+  --ink: #292a25;
+  --muted: #5c594f;
+  --line: #c9c0aa;
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: 0.5rem 0 2rem;
+  color: var(--ink);
+}
+
+.trail-header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 1.5rem;
+  margin-bottom: 1.25rem;
+}
+
+.trail-eyebrow {
+  margin-bottom: 0.3rem;
+  color: var(--ember);
+  font-family: Arial, sans-serif;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+}
+
+.trail-header h1 {
+  margin: 0 0 0.4rem;
+  font-size: clamp(2rem, 5vw, 2.9rem);
+}
+
+.trail-lead {
+  max-width: 34rem;
+  margin: 0;
+  color: var(--muted);
+  font-size: 1.05rem;
+  line-height: 1.5;
+}
+
+.trail-score {
+  flex: none;
+  min-width: 11rem;
+  padding: 0.8rem 1rem;
+  border: 2px solid var(--night);
+  border-radius: 6px;
+  background: var(--night);
+  box-shadow: 4px 5px 0 rgb(50 44 31 / 20%);
+  color: var(--paper);
+  text-align: center;
+}
+
+.trail-score p {
+  margin: 0;
+}
+
+.trail-score-days {
+  color: var(--gold);
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 2.6rem;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.trail-score-of {
+  margin-left: 0.3rem;
+  color: #a9a48f;
+  font-size: 1.2rem;
+}
+
+.trail-score-label {
+  font-family: Arial, sans-serif;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.trail-score-steps {
+  margin-top: 0.35rem !important;
+  color: #c9c3ad;
+  font-size: 0.85rem;
+}
+
+.trail-reset {
+  min-height: 2.5rem;
+  margin-top: 0.2rem;
+  padding: 0 0.6rem;
+  border: 0;
+  background: transparent;
+  color: #c9c3ad;
+  font-size: 0.85rem;
+  text-decoration: underline;
+}
+
+.trail-reset:hover,
+.trail-reset:focus-visible {
+  color: #fff;
+}
+
+.trail-notice {
+  margin-bottom: 1rem;
+  padding: 0.6rem 0.8rem;
+  border-left: 4px solid var(--ember);
+  background: var(--paper);
+  font-size: 0.9rem;
+}
+
+.trail-layout {
+  display: grid;
+  grid-template-columns: minmax(280px, 400px) minmax(0, 1fr);
+  align-items: start;
+  gap: 1.5rem;
+}
+
+/* ----- the map ----- */
+
+.trail-map {
+  position: sticky;
+  top: 0.75rem;
+  aspect-ratio: 400 / 600;
+  overflow: hidden;
+  border: 2px solid var(--night);
+  border-radius: 8px;
+  background:
+    radial-gradient(circle at 18% 12%, rgb(255 255 255 / 55%) 0 1px, transparent 2px),
+    radial-gradient(circle at 72% 8%, rgb(255 255 255 / 45%) 0 1px, transparent 2px),
+    radial-gradient(circle at 46% 26%, rgb(255 255 255 / 35%) 0 1px, transparent 2px),
+    radial-gradient(circle at 88% 34%, rgb(255 255 255 / 40%) 0 1px, transparent 2px),
+    radial-gradient(circle at 9% 48%, rgb(255 255 255 / 30%) 0 1px, transparent 2px),
+    radial-gradient(ellipse at 50% 105%, rgb(181 82 61 / 30%), transparent 55%),
+    linear-gradient(180deg, #171a17, var(--night) 45%, var(--night-soft));
+  box-shadow: 5px 6px 0 rgb(50 44 31 / 20%);
+}
+
+.trail-map > svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.trail-map path {
+  fill: none;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.trail-road-edge {
+  stroke: rgb(0 0 0 / 45%);
+  stroke-width: 34;
+}
+
+.trail-road {
+  stroke: var(--road);
+  stroke-width: 28;
+}
+
+.trail-road-walked {
+  stroke: var(--gold);
+  stroke-width: 28;
+  stroke-dasharray: 0 2000;
+  transition: stroke-dasharray 0.6s ease;
+}
+
+.trail-road-dashes {
+  stroke: rgb(41 42 37 / 55%);
+  stroke-width: 2;
+  stroke-dasharray: 9 9;
+}
+
+.trail-start circle {
+  fill: var(--night);
+  stroke: var(--paper);
+  stroke-width: 3;
+}
+
+.trail-start text {
+  fill: var(--paper);
+  font-family: Arial, sans-serif;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+}
+
+.trail-you {
+  fill: var(--ember);
+  stroke: #fff;
+  stroke-width: 3;
+  transition: cx 0.6s ease, cy 0.6s ease;
+}
+
+.trail-you-pulse {
+  fill: rgb(224 171 69 / 45%);
+  transform-box: fill-box;
+  transform-origin: center;
+  transition: cx 0.6s ease, cy 0.6s ease;
+  animation: trail-pulse 1.8s ease-out infinite;
+}
+
+@keyframes trail-pulse {
+  from { transform: scale(0.6); opacity: 0.9; }
+  to { transform: scale(1.9); opacity: 0; }
+}
+
+/* ----- the flags ----- */
+
+.trail-flag {
+  position: absolute;
+  display: flex;
+  align-items: flex-start;
+  gap: 0.15rem;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--paper);
+  /* The foot of the pole (8px from the left of the drawing) stands on the road. */
+  transform: translate(-8px, -100%);
+  transform-origin: 8px 100%;
+  cursor: pointer;
+}
+
+.trail-flag.is-flipped {
+  flex-direction: row-reverse;
+  transform: translate(calc(-100% + 46px), -100%);
+  transform-origin: calc(100% - 46px) 100%;
+}
+
+.trail-flag-art {
+  flex: none;
+  overflow: visible;
+  filter: drop-shadow(2px 3px 0 rgb(0 0 0 / 45%));
+}
+
+.trail-flag-pole {
+  stroke: #efe6cf;
+  stroke-width: 3.5;
+  stroke-linecap: round;
+}
+
+.trail-flag-cloth {
+  fill: #9a947d;
+  stroke: #1d211c;
+  stroke-width: 1.5;
+  stroke-linejoin: round;
+  transition: fill 0.25s ease;
+}
+
+.trail-flag-number {
+  fill: #fff;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 19px;
+  font-weight: 700;
+}
+
+.trail-flag-check {
+  fill: none;
+  stroke: #fff;
+  stroke-width: 4;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  opacity: 0;
+}
+
+.trail-flag-label {
+  display: grid;
+  margin-top: 0.3rem;
+  padding: 0.25rem 0.55rem;
+  border: 1px solid rgb(247 242 229 / 35%);
+  border-radius: 6px;
+  background: rgb(23 26 23 / 88%);
+  font-family: Arial, sans-serif;
+  line-height: 1.2;
+  text-align: left;
+  white-space: nowrap;
+}
+
+.trail-flag-day {
+  font-size: 0.82rem;
+  font-weight: 700;
+}
+
+.trail-flag-count {
+  color: #c9c3ad;
+  font-size: 0.72rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.trail-flag.is-current .trail-flag-cloth {
+  fill: var(--ember);
+}
+
+.trail-flag.is-current .trail-flag-art {
+  animation: trail-wave 2.4s ease-in-out infinite;
+  transform-origin: 8px 64px;
+}
+
+.trail-flag.is-done .trail-flag-cloth {
+  fill: var(--moss);
+}
+
+.trail-flag.is-done .trail-flag-number {
+  opacity: 0;
+}
+
+.trail-flag.is-done .trail-flag-check {
+  opacity: 1;
+}
+
+.trail-flag.is-done .trail-flag-count {
+  color: #b9cf93;
+}
+
+.trail-flag.is-open .trail-flag-label {
+  border-color: var(--gold);
+  background: var(--gold);
+  color: var(--night);
+}
+
+.trail-flag.is-open .trail-flag-count {
+  color: var(--night);
+}
+
+.trail-flag:hover .trail-flag-label {
+  border-color: var(--gold);
+}
+
+.trail-flag:focus-visible {
+  outline: 3px solid var(--gold);
+  outline-offset: 4px;
+  border-radius: 6px;
+}
+
+.trail-flag.just-done .trail-flag-art {
+  animation: trail-cheer 0.9s ease;
+  transform-origin: 8px 64px;
+}
+
+@keyframes trail-wave {
+  0%, 100% { transform: rotate(0deg); }
+  50% { transform: rotate(-4deg); }
+}
+
+@keyframes trail-cheer {
+  0% { transform: scale(1) rotate(0deg); }
+  30% { transform: scale(1.35) rotate(-8deg); }
+  60% { transform: scale(0.95) rotate(5deg); }
+  100% { transform: scale(1) rotate(0deg); }
+}
+
+/* ----- the day's jobs ----- */
+
+.trail-day {
+  border: 2px solid var(--night);
+  border-radius: 8px;
+  background: #fffdf6;
+  box-shadow: 5px 6px 0 rgb(50 44 31 / 20%);
+  scroll-margin-top: 0.75rem;
+}
+
+.trail-day:focus {
+  outline: none;
+}
+
+.trail-day-header {
+  padding: 1.1rem 1.25rem 1rem;
+  border-radius: 6px 6px 0 0;
+  background: var(--night);
+  color: var(--paper);
+}
+
+.trail-day-kicker {
+  margin: 0 0 0.15rem;
+  color: var(--gold);
+  font-family: Arial, sans-serif;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+}
+
+.wiki-main .trail-day-header h2 {
+  margin: 0 0 0.7rem;
+  color: var(--paper);
+  font-size: clamp(1.4rem, 3vw, 1.8rem);
+}
+
+.trail-day-progress {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.trail-pips {
+  display: flex;
+  gap: 0.35rem;
+}
+
+.trail-pips span {
+  width: 1.6rem;
+  height: 0.5rem;
+  border-radius: 999px;
+  background: rgb(247 242 229 / 22%);
+  transition: background 0.25s ease;
+}
+
+.trail-pips span.is-on {
+  background: var(--gold);
+}
+
+.trail-day-count {
+  color: #c9c3ad;
+  font-family: Arial, sans-serif;
+  font-size: 0.82rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.trail-steps {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.trail-step {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 0 0.9rem;
+  padding: 0.95rem 1.25rem;
+  transition: background 0.2s ease;
+}
+
+.trail-step + .trail-step {
+  border-top: 1px solid var(--line);
+}
+
+/* A big, hand-drawn-looking tick box: the reward for doing the job. */
+.trail-step input[type="checkbox"] {
+  appearance: none;
+  display: grid;
+  place-content: center;
+  width: 2.1rem;
+  height: 2.1rem;
+  margin: 0.05rem 0 0;
+  border: 2.5px solid var(--night);
+  border-radius: 6px;
+  background: #fff;
+  cursor: pointer;
+  transition: background 0.15s ease, transform 0.15s ease;
+}
+
+.trail-step input[type="checkbox"]::before {
+  content: "";
+  width: 1.15rem;
+  height: 0.6rem;
+  border-left: 4px solid #fff;
+  border-bottom: 4px solid #fff;
+  transform: translateY(-0.12rem) rotate(-45deg) scale(0);
+  transition: transform 0.18s cubic-bezier(0.3, 1.6, 0.5, 1);
+}
+
+.trail-step input[type="checkbox"]:hover {
+  background: #f1ead9;
+}
+
+.trail-step input[type="checkbox"]:checked {
+  border-color: var(--moss);
+  background: var(--moss);
+  transform: rotate(-4deg);
+}
+
+.trail-step input[type="checkbox"]:checked::before {
+  transform: translateY(-0.12rem) rotate(-45deg) scale(1);
+}
+
+.trail-step input[type="checkbox"]:focus-visible {
+  outline: 3px solid var(--gold);
+  outline-offset: 2px;
+}
+
+.trail-step label {
+  display: block;
+  padding: 0.25rem 0;
+  font-size: 1.08rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.trail-step p {
+  margin: 0.1rem 0 0;
+  color: var(--muted);
+  line-height: 1.55;
+}
+
+.trail-step.is-done {
+  background: #f3f0e2;
+}
+
+.trail-step.is-done label {
+  color: var(--muted);
+  font-weight: 400;
+  text-decoration: line-through;
+  text-decoration-color: var(--moss);
+  text-decoration-thickness: 2px;
+}
+
+.trail-step.is-done p {
+  display: none;
+}
+
+.trail-day-done {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem 1rem;
+  padding: 1rem 1.25rem;
+  border-top: 2px solid var(--night);
+  border-radius: 0 0 6px 6px;
+  background: var(--moss);
+  color: #fff;
+  animation: trail-rise 0.35s ease;
+}
+
+.trail-day-done p {
+  margin: 0;
+}
+
+.trail-day-done-title {
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 1.3rem;
+  font-weight: 700;
+}
+
+.wiki-main .trail-day-done a {
+  color: #fff;
+  font-weight: 700;
+}
+
+.trail-next {
+  min-height: 3rem;
+  padding: 0 1.25rem;
+  border: 2px solid var(--night);
+  border-radius: 6px;
+  background: var(--gold);
+  color: var(--night);
+  font-weight: 700;
+  box-shadow: 3px 3px 0 rgb(0 0 0 / 25%);
+}
+
+.trail-next:hover,
+.trail-next:focus-visible {
+  background: #f0bd58;
+}
+
+@keyframes trail-rise {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: none; }
+}
+
+@media (max-width: 767.98px) {
+  .trail-header {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .trail-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .trail-map {
+    position: relative;
+    top: auto;
+    max-width: 360px;
+    width: 100%;
+    margin: 0 auto;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .trail-you-pulse,
+  .trail-flag.is-current .trail-flag-art,
+  .trail-flag.just-done .trail-flag-art,
+  .trail-day-done {
+    animation: none;
+  }
+
+  .trail-road-walked,
+  .trail-you,
+  .trail-you-pulse,
+  .trail-step input[type="checkbox"],
+  .trail-step input[type="checkbox"]::before {
+    transition: none;
+  }
+}
+
+
+/* ---------- Game feel ----------
+   Page backdrop, and buttons and nav styled after the game's own menus, so the
+   wiki feels like part of the game the player has open next to it.
+   Artwork (c) Klei Entertainment: wwwroot/images/page-bg.webp, home-hero.webp. */
+
+:root {
+  --game-cream: #e9dcae;
+  --game-gold-top: #f6e6b4;
+  --game-gold: #dcbd72;
+  --game-gold-deep: #c9a658;
+  --game-brown: #2a2114;
+  --notch: polygon(9px 0, calc(100% - 9px) 0, 100% 9px, 100% calc(100% - 9px), calc(100% - 9px) 100%, 9px 100%, 0 calc(100% - 9px), 0 9px);
+  --notch-inner: polygon(8px 0, calc(100% - 8px) 0, 100% 8px, 100% calc(100% - 8px), calc(100% - 8px) 100%, 8px 100%, 0 calc(100% - 8px), 0 8px);
+}
+
+/* The backdrop sits behind everything, blurred and darkened so it never competes with the text. */
+html {
+  background: #14110f;
+}
+
+body {
+  background: transparent;
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: -30px;
+  z-index: -1;
+  background: #14110f url("../images/page-bg.webp") center / cover no-repeat;
+  filter: blur(6px) brightness(0.5) saturate(0.9);
+}
+
+.wiki-main {
+  border: 2px solid #17140f;
+  outline-color: rgb(255 255 255 / 35%);
+  background:
+    radial-gradient(ellipse at 50% 0, rgb(255 255 255 / 30%), transparent 65%),
+    rgb(238 232 216 / 97%);
+  box-shadow: 0 14px 34px rgb(0 0 0 / 55%), 0 0 0 1px rgb(233 220 174 / 25%);
+}
+
+.home-hero.home-hero-art {
+  background:
+    linear-gradient(90deg, rgb(16 15 14 / 92%) 0%, rgb(16 15 14 / 78%) 34%, rgb(16 15 14 / 22%) 66%, rgb(16 15 14 / 0%) 100%),
+    url("../images/home-hero.webp") 62% center / cover no-repeat,
+    #14110f;
+}
+
+/* ----- main buttons: the cream, notched buttons of the game menu ----- */
+
+body .wiki-main .btn-primary,
+body .wiki-main .contribute-primary,
+body .wiki-main .trail-next,
+body .wiki-main .home-search button,
+body .wiki-nav .btn-outline-primary {
+  position: relative;
+  isolation: isolate;
+  min-height: 2.9rem;
+  padding-inline: 1.35rem;
+  border: 0 !important;
+  border-radius: 0;
+  background: var(--game-brown) !important;
+  box-shadow: none !important;
+  clip-path: var(--notch);
+  color: var(--game-brown) !important;
+  font-family: Georgia, "Times New Roman", serif;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  transition: transform 0.12s ease;
+}
+
+body .wiki-main .btn-primary::before,
+body .wiki-main .contribute-primary::before,
+body .wiki-main .trail-next::before,
+body .wiki-main .home-search button::before,
+body .wiki-nav .btn-outline-primary::before {
+  content: "";
+  position: absolute;
+  inset: 2px;
+  z-index: -1;
+  background: linear-gradient(180deg, var(--game-gold-top), var(--game-gold) 62%, var(--game-gold-deep));
+  clip-path: var(--notch-inner);
+  transition: filter 0.12s ease;
+}
+
+body .wiki-main .btn-primary:hover,
+body .wiki-main .contribute-primary:hover,
+body .wiki-main .trail-next:hover,
+body .wiki-main .home-search button:hover,
+body .wiki-nav .btn-outline-primary:hover {
+  transform: translateY(-2px);
+}
+
+body .wiki-main .btn-primary:hover::before,
+body .wiki-main .contribute-primary:hover::before,
+body .wiki-main .trail-next:hover::before,
+body .wiki-main .home-search button:hover::before,
+body .wiki-nav .btn-outline-primary:hover::before {
+  filter: brightness(1.1);
+}
+
+body .wiki-main .btn-primary:active,
+body .wiki-main .contribute-primary:active,
+body .wiki-main .trail-next:active,
+body .wiki-main .home-search button:active,
+body .wiki-nav .btn-outline-primary:active {
+  transform: translateY(1px) scale(0.98);
+}
+
+/* The notch clips a normal outline, so focus is shown as a white ring inside the button. */
+body .wiki-main .btn-primary:focus-visible,
+body .wiki-main .contribute-primary:focus-visible,
+body .wiki-main .trail-next:focus-visible,
+body .wiki-main .home-search button:focus-visible,
+body .wiki-nav .btn-outline-primary:focus-visible {
+  outline: none;
+  text-decoration: underline;
+}
+
+body .wiki-main .btn-primary:focus-visible::before,
+body .wiki-main .contribute-primary:focus-visible::before,
+body .wiki-main .trail-next:focus-visible::before,
+body .wiki-main .home-search button:focus-visible::before,
+body .wiki-nav .btn-outline-primary:focus-visible::before {
+  box-shadow: inset 0 0 0 3px #fff;
+}
+
+/* ----- nav: cream menu words; the page you are on sits in a notched frame ----- */
+
+body .wiki-nav .nav-link {
+  position: relative;
+  isolation: isolate;
+  padding: 0.5rem 0.7rem !important;
+  color: var(--game-cream) !important;
+  clip-path: var(--notch);
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 0.93rem;
+  letter-spacing: 0.01em;
+  transition: transform 0.12s ease, color 0.12s ease;
+}
+
+body .wiki-nav .nav-link::before {
+  content: "";
+  position: absolute;
+  inset: 2px;
+  z-index: -1;
+  background: transparent;
+  clip-path: var(--notch-inner);
+}
+
+body .wiki-nav .nav-link:hover,
+body .wiki-nav .nav-link:focus-visible,
+body .wiki-nav .nav-link.is-active {
+  background: var(--game-cream) !important;
+  color: #fff6d6 !important;
+  outline: none;
+}
+
+body .wiki-nav .nav-link:hover::before,
+body .wiki-nav .nav-link:focus-visible::before,
+body .wiki-nav .nav-link.is-active::before {
+  background: #1b1d18;
+}
+
+body .wiki-nav .nav-link:hover {
+  transform: translateX(2px);
+}
+
+body .wiki-nav .nav-link.is-active {
+  color: #fff !important;
+}
+
+/* The nav search looks up any page; the label on its button and field says so. */
+.wiki-nav form {
+  flex: none;
+}
+
+.wiki-nav form .form-control {
+  width: 10.5rem;
+  font-size: 0.86rem;
+}
+
+/* The nav bar may use the full window width, so every link and the search fit on one line. */
+.wiki-nav > .container {
+  max-width: 1320px;
+}
+
+.wiki-nav .navbar-brand {
+  margin-right: 0.5rem;
+}
+
+.wiki-nav .navbar-nav {
+  flex-wrap: nowrap;
+}
+
+/* ----- small motions: things respond when touched ----- */
+
+.lookup-chip,
+.lookup-selected-chip,
+.trail-flag,
+.tool-card {
+  transition: transform 0.12s ease, border-color 0.12s ease, background 0.12s ease;
+}
+
+.lookup-chip:hover {
+  transform: translateX(3px);
+}
+
+.lookup-chip:active,
+.lookup-selected-chip:active {
+  transform: scale(0.96);
+}
+
+.lookup-card {
+  animation: game-rise 0.28s ease both;
+}
+
+@keyframes game-rise {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: none; }
+}
+
+/* ----- reverse lookup: a filter that is clearly not the wiki search ----- */
+
+.lookup-filter-box {
+  margin-bottom: 0.75rem;
+  padding: 0.5rem 0.65rem 0.35rem;
+  border: 1px dashed var(--wiki-moss);
+  border-radius: 6px;
+  background: rgb(104 114 88 / 9%);
+}
+
+.lookup-filter-box label {
+  display: block;
+  color: var(--wiki-moss);
+  font-family: Arial, sans-serif;
+  font-size: 0.66rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.lookup-filter-box .lookup-filter {
+  width: 100%;
+  min-height: 2.4rem;
+  margin: 0;
+  padding: 0.1rem 0;
+  border: 0;
+  border-bottom: 2px solid var(--wiki-moss);
+  border-radius: 0;
+  outline: 0;
+  background: transparent;
+  color: var(--wiki-ink);
+  font-style: italic;
+}
+
+.lookup-filter-box .lookup-filter:focus {
+  border-bottom-color: var(--wiki-ember);
+}
+
+/* ----- reverse lookup: the picture guide shown before anything is picked ----- */
+
+.lookup-empty {
+  padding: 1.5rem 1.25rem 1.75rem;
+  border: 2px solid #17140f;
+  border-radius: 8px;
+  background: #fffdf6;
+}
+
+.lookup-how {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1.5rem;
+  margin: 1rem 0 1.5rem;
+  padding: 0;
+  list-style: none;
+}
+
+.lookup-how li {
+  position: relative;
+  display: grid;
+  justify-items: center;
+  gap: 0.25rem;
+  text-align: center;
+}
+
+/* Arrows between the steps. */
+.lookup-how li + li::before {
+  content: "\2192";
+  position: absolute;
+  top: 2.4rem;
+  left: -1.35rem;
+  color: var(--wiki-ember);
+  font-family: Arial, sans-serif;
+  font-size: 1.6rem;
+  font-weight: 700;
+}
+
+.lookup-how-art {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.35rem;
+  width: 100%;
+  height: 6.25rem;
+  border: 2px solid #17140f;
+  border-radius: 8px;
+  background: radial-gradient(circle at 50% 40%, #3a3f33, #1d211c);
+  box-shadow: 3px 4px 0 rgb(50 44 31 / 22%);
+}
+
+.lookup-how-art-missing .item-icon {
+  filter: grayscale(1) brightness(0.75);
+  opacity: 0.7;
+}
+
+.lookup-how-plus {
+  display: grid;
+  place-items: center;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 50%;
+  background: var(--wiki-ember);
+  color: #fff;
+  font-family: Arial, sans-serif;
+  font-weight: 700;
+}
+
+.lookup-how-number {
+  display: grid;
+  place-items: center;
+  width: 1.9rem;
+  height: 1.9rem;
+  margin-top: -1.2rem;
+  border: 2px solid #17140f;
+  border-radius: 50%;
+  background: var(--game-gold);
+  color: var(--game-brown);
+  font-family: Arial, sans-serif;
+  font-weight: 700;
+}
+
+.lookup-how strong {
+  font-size: 1.1rem;
+}
+
+.lookup-how-text {
+  color: #5c594f;
+  font-size: 0.95rem;
+  line-height: 1.35;
+}
+
+.lookup-how-try {
+  margin-bottom: 0.6rem;
+  color: #5c594f;
+}
+
+@media (max-width: 575.98px) {
+  .lookup-how {
+    grid-template-columns: 1fr;
+    gap: 1.75rem;
+  }
+
+  .lookup-how li + li::before {
+    content: "\2193";
+    top: -1.75rem;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lookup-card {
+    animation: none;
+  }
+
+  .lookup-chip,
+  .lookup-selected-chip,
+  body .wiki-main .btn-primary,
+  body .wiki-main .contribute-primary,
+  body .wiki-main .trail-next,
+  body .wiki-main .home-search button,
+  body .wiki-nav .btn-outline-primary,
+  body .wiki-nav .nav-link {
+    transition: none;
+  }
+}
+
+/* The nav search button is a magnifier, so the bar fits next to all five links. */
+body .wiki-nav .wiki-nav-go {
+  min-width: 2.9rem;
+  padding-inline: 0.8rem;
+  font-size: 1.45rem;
+  line-height: 1;
+}

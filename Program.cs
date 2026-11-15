@@ -6,6 +6,8 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddRazorPages();
 builder.Services.AddSingleton<SurviveWiki.Services.ItemImages>();
+builder.Services.AddSingleton<SurviveWiki.Services.SearchTopics>();
+builder.Services.AddSingleton<SurviveWiki.Services.ItemNotes>();
 builder.Services.AddDbContext<SurviveWikiContext>(options =>
     options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection") 
     ?? "Data Source=survivewiki.db"));

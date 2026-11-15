@@ -9,35 +9,86 @@
         <div class="col-md-8">
             <h2 class="mb-4">Search Results</h2>
 
-            <form method="get" class="d-flex gap-2 mb-4">
-                <input type="text" asp-for="Query" class="form-control form-control-lg" placeholder="Search..." autofocus />
+            <form method="get" class="d-flex gap-2 mb-4" role="search">
+                <input type="text" asp-for="Query" class="form-control form-control-lg" placeholder="Search..."
+                       maxlength="60" aria-label="Search the wiki" autofocus />
                 <button type="submit" class="btn btn-primary btn-lg">Search</button>
             </form>
+
+            @if (Model.Topic is not null && Model.TopicItems.Any())
+            {
+                <section class="search-topic" aria-labelledby="topic-heading">
+                    <p class="search-topic-eyebrow">QUICK ANSWER</p>
+                    <h3 id="topic-heading">@Model.Topic.Title</h3>
+                    <p class="search-topic-advice">@Model.Topic.Advice</p>
+
+                    <div class="search-topic-items">
+                        @foreach (var item in Model.TopicItems)
+                        {
+                            <a class="search-topic-item" asp-page="/Item" asp-route-name="@item.Name">
+                                <partial name="_ItemIcon" model="new ItemIconModel(item.Name, 56)" />
+                                <span class="search-topic-item-body">
+                                    <span class="search-topic-item-name">@item.Name</span>
+                                    @if (item.CraftedFrom.Any())
+                                    {
+                                        <span class="search-topic-recipe">
+                                            @foreach (var ingredient in item.CraftedFrom)
+                                            {
+                                                <span class="search-topic-ingredient">
+                                                    <partial name="_ItemIcon" model="new ItemIconModel(ingredient.IngredientItem.Name, 24)" />
+                                                    @ingredient.IngredientItem.Name × @ingredient.QuantityRequired
+                                                </span>
+                                            }
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        <span class="search-topic-recipe">Found in the world – nothing to craft.</span>
+                                    }
+                                </span>
+                            </a>
+                        }
+                    </div>
+                </section>
+            }
 
             @if (Model.HasSearched)
             {
                 if (Model.SearchResults.Any())
                 {
+                    <h3 class="search-list-heading">
+                        Pages matching “@Model.Query” <span class="search-list-count">@Model.SearchResults.Count</span>
+                    </h3>
                     <div class="list-group">
                         @foreach (var item in Model.SearchResults)
                         {
                             <a asp-page="/Item" asp-route-name="@item.Name" class="list-group-item list-group-item-action d-flex gap-3">
                                 <partial name="_ItemIcon" model="new ItemIconModel(item.Name, 48)" />
                                 <div class="flex-grow-1" style="min-width: 0">
-                                    <div class="d-flex w-100 justify-content-between">
+                                    <div class="d-flex w-100 justify-content-between gap-2">
                                         <h5 class="mb-1 text-primary">@item.Name</h5>
                                         <small>@item.Category</small>
                                     </div>
-                                    <p class="mb-1 text-muted">@item.Description</p>
+                                    @if (!string.IsNullOrWhiteSpace(item.Description))
+                                    {
+                                        <p class="mb-1 text-muted search-result-text">@item.Description</p>
+                                    }
                                 </div>
                             </a>
                         }
                     </div>
                 }
-                else
+                else if (Model.Topic is null || !Model.TopicItems.Any())
                 {
-                    <div class="alert alert-warning">
-                        No items found matching "@Model.Query".
+                    <div class="alert alert-warning" role="status">
+                        <p class="mb-2"><strong>Nothing found for “@Model.Query”.</strong></p>
+                        <p class="mb-0">
+                            Try one simple word, like <a asp-page="/Search" asp-route-query="axe">axe</a>,
+                            <a asp-page="/Search" asp-route-query="night">night</a> or
+                            <a asp-page="/Search" asp-route-query="food">food</a>.
+                            You can also <a asp-page="/ReverseLookup">see what you can craft</a> from what you are carrying,
+                            or follow the <a asp-page="/Guide">First 5 Days</a> plan.
+                        </p>
                     </div>
                 }
             }

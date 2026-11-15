@@ -10,6 +10,7 @@ public static class DbInitializer
     {
         context.Database.Migrate();
         SeedWikiItems(context, contentRootPath);
+        ApplyItemNotes(context, contentRootPath);
         SeedGuideSteps(context, contentRootPath);
     }
 
@@ -69,6 +70,77 @@ public static class DbInitializer
         context.SaveChanges();
     }
 
+    /// <summary>
+    /// Replaces the imported description and tip of the items a beginner meets first
+    /// with the hand-written notes in Data/item-notes.json. A note also covers the
+    /// item's "/DST" variant. Runs after the catalog seed, which resets those fields.
+    /// A missing or broken file leaves the imported text in place.
+    /// </summary>
+    private static void ApplyItemNotes(SurviveWikiContext context, string contentRootPath)
+    {
+        var notesPath = Path.Combine(contentRootPath, "Data", "item-notes.json");
+        if (!File.Exists(notesPath))
+        {
+            return;
+        }
+
+        ItemNotes? notes;
+        try
+        {
+            notes = JsonSerializer.Deserialize<ItemNotes>(
+                File.ReadAllText(notesPath),
+                new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+        }
+        catch (JsonException)
+        {
+            return;
+        }
+
+        if (notes is null)
+        {
+            return;
+        }
+
+        var itemsByName = context.Items
+            .Where(item => item.SourceUrl != null && item.SourceUrl != "")
+            .ToDictionary(item => item.Name, StringComparer.OrdinalIgnoreCase);
+
+        foreach (var note in notes.Notes)
+        {
+            foreach (var name in new[] { note.Name, note.Name + "/DST" })
+            {
+                if (!itemsByName.TryGetValue(name, out var item))
+                {
+                    continue;
+                }
+
+                if (!string.IsNullOrWhiteSpace(note.Does))
+                {
+                    item.Description = note.Does.Trim();
+                }
+
+                if (!string.IsNullOrWhiteSpace(note.BestFor))
+                {
+                    item.BeginnerTip = note.BestFor.Trim();
+                }
+            }
+        }
+
+        context.SaveChanges();
+    }
+
+    private sealed class ItemNotes
+    {
+        public List<ItemNote> Notes { get; set; } = new();
+    }
+
+    private sealed class ItemNote
+    {
+        public string Name { get; set; } = string.Empty;
+        public string Does { get; set; } = string.Empty;
+        public string BestFor { get; set; } = string.Empty;
+    }
+
     private sealed class GuidePlan
     {
         public List<GuidePlanStep> Steps { get; set; } = new();
@@ -81,17 +153,47 @@ public static class DbInitializer
         public string Instructions { get; set; } = string.Empty;
     }
 
+    /// <summary>
+    /// Loads the item catalog. Data/wiki-items.json is the main import and always wins:
+    /// its text and recipes are applied on every start. Data/wiki-items-extra.json
+    /// (from Tools/import-missing-items.py) is loaded after it and only fills gaps:
+    /// items the main file lacks, plus a recipe or crafting station where it has none.
+    /// </summary>
     private static void SeedWikiItems(SurviveWikiContext context, string contentRootPath)
     {
         var catalogPath = Path.Combine(contentRootPath, "Data", "wiki-items.json");
-        var catalogJson = File.ReadAllText(catalogPath);
-        var catalog = JsonSerializer.Deserialize<WikiCatalog>(
-            catalogJson,
-            new JsonSerializerOptions { PropertyNameCaseInsensitive = true })
+        var catalog = ReadCatalog(catalogPath)
             ?? throw new InvalidDataException($"Could not read the wiki item catalog at {catalogPath}.");
 
+        // The extra file is optional. Without it the wiki still works, with fewer items.
+        var extraPath = Path.Combine(contentRootPath, "Data", "wiki-items-extra.json");
+        WikiCatalog? extra = null;
+        if (File.Exists(extraPath))
+        {
+            try
+            {
+                extra = ReadCatalog(extraPath);
+            }
+            catch (JsonException)
+            {
+                extra = null;
+            }
+        }
+
+        var mainByName = catalog.Items
+            .GroupBy(wikiItem => wikiItem.Name, StringComparer.OrdinalIgnoreCase)
+            .ToDictionary(group => group.Key, group => group.First(), StringComparer.OrdinalIgnoreCase);
+
+        // Entries of the extra file that describe an item the main file does not have.
+        var extraOnly = (extra?.Items ?? new())
+            .Where(wikiItem => !string.IsNullOrWhiteSpace(wikiItem.Name) && !mainByName.ContainsKey(wikiItem.Name))
+            .GroupBy(wikiItem => wikiItem.Name, StringComparer.OrdinalIgnoreCase)
+            .Select(group => group.First())
+            .ToList();
+
         var itemsByName = context.Items.ToDictionary(item => item.Name, StringComparer.OrdinalIgnoreCase);
-        foreach (var wikiItem in catalog.Items)
+
+        void Apply(WikiItem wikiItem)
         {
             if (!itemsByName.TryGetValue(wikiItem.Name, out var item))
             {
@@ -101,11 +203,39 @@ public static class DbInitializer
             }
 
             item.Category = wikiItem.Category;
-            item.Description = wikiItem.Description;
+            item.Description = WikiText.Clean(wikiItem.Description);
             item.BeginnerTip = wikiItem.BeginnerTip;
             item.CraftingStation = wikiItem.CraftingStation;
             item.SourceUrl = wikiItem.SourceUrl;
             item.Status = PageStatus.Approved;
+        }
+
+        foreach (var wikiItem in catalog.Items)
+        {
+            Apply(wikiItem);
+        }
+
+        foreach (var wikiItem in extraOnly)
+        {
+            // A page a contributor wrote under the same name is theirs; the import must not replace it.
+            var contributed = itemsByName.TryGetValue(wikiItem.Name, out var existing)
+                              && string.IsNullOrEmpty(existing.SourceUrl);
+            if (!contributed)
+            {
+                Apply(wikiItem);
+            }
+        }
+
+        // Where the main file does not say which station an item needs, take it from the extra file.
+        foreach (var wikiItem in extra?.Items ?? new())
+        {
+            if (mainByName.TryGetValue(wikiItem.Name, out var mainItem)
+                && mainItem.CraftingStation == "Not specified"
+                && wikiItem.CraftingStation != "Not specified"
+                && itemsByName.TryGetValue(wikiItem.Name, out var item))
+            {
+                item.CraftingStation = wikiItem.CraftingStation;
+            }
         }
 
         context.SaveChanges();
@@ -116,9 +246,13 @@ public static class DbInitializer
             .Select(recipe => (recipe.ResultItemId, recipe.IngredientItemId))
             .ToHashSet();
 
-        foreach (var wikiItem in catalog.Items)
+        void AddRecipe(WikiItem wikiItem)
         {
-            var resultItem = itemsByName[wikiItem.Name];
+            if (!itemsByName.TryGetValue(wikiItem.Name, out var resultItem) || string.IsNullOrEmpty(resultItem.SourceUrl))
+            {
+                return;
+            }
+
             foreach (var ingredient in wikiItem.Ingredients)
             {
                 if (!itemsByName.TryGetValue(ingredient.Name, out var ingredientItem))
@@ -138,8 +272,28 @@ public static class DbInitializer
             }
         }
 
+        foreach (var wikiItem in catalog.Items)
+        {
+            AddRecipe(wikiItem);
+        }
+
+        foreach (var wikiItem in extra?.Items ?? new())
+        {
+            // Use the extra recipe only when the main file has none for that item.
+            var mainHasRecipe = mainByName.TryGetValue(wikiItem.Name, out var mainItem) && mainItem.Ingredients.Count > 0;
+            if (!mainHasRecipe)
+            {
+                AddRecipe(wikiItem);
+            }
+        }
+
         context.SaveChanges();
     }
+
+    private static WikiCatalog? ReadCatalog(string path) =>
+        JsonSerializer.Deserialize<WikiCatalog>(
+            File.ReadAllText(path),
+            new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
 
     private sealed class WikiCatalog
     {
