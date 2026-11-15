@@ -5,7 +5,7 @@
       "keywords": ["night", "dark", "darkness", "dusk", "light", "fire", "first night"],
       "title": "Night is coming?",
       "advice": "Standing in total darkness kills you. Build a light before the screen goes black and stay beside it until morning.",
-      "items": ["Campfire", "Torch"]
+      "items": ["Campfire", "Torch", "Fire Pit"]
     },
     {
       "keywords": ["chop", "tree", "trees", "wood", "lumber"],
@@ -23,7 +23,7 @@
       "keywords": ["hungry", "hunger", "eat", "starving", "starve", "food"],
       "title": "Getting hungry?",
       "advice": "Pick berries and carrots as you explore. Set Traps on rabbit holes for meat, and cook food over a fire.",
-      "items": ["Berries", "Carrot", "Trap"]
+      "items": ["Berries", "Carrot", "Trap", "Crock Pot"]
     },
     {
       "keywords": ["cold", "winter", "freeze", "freezing", "warm"],

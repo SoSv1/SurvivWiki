@@ -1,73 +1,114 @@
-﻿@page "{name}"
+﻿@page "{**name}"
 @model SurviveWiki.Pages.ItemModel
 @{
     ViewData["Title"] = Model.CurrentItem?.Name;
+    var item = Model.CurrentItem!;
 }
 
-<div class="container mt-4">
-    <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="card shadow-sm border-primary">
-                <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
-                    <div class="d-flex align-items-center gap-3">
-                        <span class="item-icon-frame"><partial name="_ItemIcon" model="new ItemIconModel(Model.CurrentItem!.Name, 64)" /></span>
-                        <h2 class="h4 mb-0">@Model.CurrentItem!.Name</h2>
-                    </div>
-                    <span class="badge bg-light text-primary">@Model.CurrentItem.Category</span>
-                </div>
-                <div class="card-body">
-                    @if (string.IsNullOrWhiteSpace(Model.CurrentItem.Description))
-                    {
-                        <p class="text-muted">No description has been written for this item yet.</p>
-                    }
-                    else
-                    {
-                        <p class="lead">@Model.CurrentItem.Description</p>
-                    }
-                    
-                    @if (!string.IsNullOrWhiteSpace(Model.CurrentItem.BeginnerTip))
-                    {
-                        <div class="alert alert-info">
-                            <strong>Beginner Tip:</strong> @Model.CurrentItem.BeginnerTip
-                        </div>
-                    }
-
-                    <h3 class="h5 mt-4">Crafting Recipe</h3>
-                    <p class="text-muted small mb-2">Crafting requirement: @Model.CurrentItem.CraftingStation</p>
-                    
-                    @if (Model.CurrentItem.CraftedFrom.Any())
-                    {
-                        <ul class="list-group mb-3">
-                            @foreach (var ingredient in Model.CurrentItem.CraftedFrom)
-                            {
-                                <li class="list-group-item d-flex justify-content-between align-items-center">
-                                    <!-- This makes the ingredients clickable! -->
-                                    <a asp-page="/Item" asp-route-name="@ingredient.IngredientItem.Name" class="item-with-icon text-decoration-none fw-bold">
-                                        <partial name="_ItemIcon" model="new ItemIconModel(ingredient.IngredientItem.Name, 40)" />
-                                        @ingredient.IngredientItem.Name
-                                    </a>
-                                    <span class="badge bg-secondary rounded-pill">
-                                        x @ingredient.QuantityRequired
-                                    </span>
-                                </li>
-                            }
-                        </ul>
-                    }
-                    else
-                    {
-                        <p class="text-muted">This item cannot be crafted.</p>
-                    }
-
-                    @if (!string.IsNullOrWhiteSpace(Model.CurrentItem.SourceUrl))
-                    {
-                        <p class="text-muted small mt-4 mb-0">
-                            Source: <a href="@Model.CurrentItem.SourceUrl">Don't Starve Wiki</a>,
-                            licensed under <a href="https://creativecommons.org/licenses/by-sa/3.0/">CC BY-SA 3.0</a>.
-                            Item artwork © Klei Entertainment.
-                        </p>
-                    }
-                </div>
-            </div>
+<article class="item-page">
+    <header class="item-head">
+        <span class="item-icon-frame"><partial name="_ItemIcon" model="new ItemIconModel(item.Name, 72)" /></span>
+        <div class="item-head-text">
+            <p class="item-category">@item.Category</p>
+            <h1>@item.Name</h1>
         </div>
+    </header>
+
+    <section class="item-about" aria-label="What it does">
+        @if (string.IsNullOrWhiteSpace(item.Description))
+        {
+            <p class="item-does item-does-missing">No description has been written for this item yet.</p>
+        }
+        else
+        {
+            <p class="item-does">@item.Description</p>
+        }
+
+        @if (!string.IsNullOrWhiteSpace(item.BeginnerTip))
+        {
+            <p class="item-tip">
+                <span class="item-tip-label">WHEN TO USE IT</span>
+                @item.BeginnerTip
+            </p>
+        }
+    </section>
+
+    <div class="item-columns">
+        <section class="item-panel" aria-labelledby="get-heading">
+            <h2 id="get-heading">How to get it</h2>
+
+            @if (Model.RecipeSource!.CraftedFrom.Any())
+            {
+                @if (!string.IsNullOrEmpty(Model.StationText))
+                {
+                    <p class="item-station">@Model.StationText</p>
+                }
+                <ul class="item-recipe">
+                    @foreach (var ingredient in Model.RecipeSource.CraftedFrom)
+                    {
+                        <li>
+                            <a asp-page="/Item" asp-route-name="@ingredient.IngredientItem.Name" class="item-with-icon">
+                                <partial name="_ItemIcon" model="new ItemIconModel(ingredient.IngredientItem.Name, 40)" />
+                                @ingredient.IngredientItem.Name
+                            </a>
+                            <span class="item-quantity">× @ingredient.QuantityRequired</span>
+                        </li>
+                    }
+                </ul>
+                @if (Model.RecipeIsFromTogether)
+                {
+                    <p class="item-more">This is the Don't Starve Together recipe.</p>
+                }
+            }
+            else
+            {
+                <p class="item-station">You find this in the world. It cannot be crafted.</p>
+            }
+        </section>
+
+        <section class="item-panel" aria-labelledby="used-heading">
+            <h2 id="used-heading">
+                Used to make
+                @if (Model.UsedToMake.Any())
+                {
+                    <span class="item-count">@Model.UsedToMake.Count</span>
+                }
+            </h2>
+
+            @if (Model.UsedToMake.Any())
+            {
+                <ul class="item-used">
+                    @foreach (var result in Model.UsedToMake.Take(ItemModel.MaxUsedInShown))
+                    {
+                        <li>
+                            <a asp-page="/Item" asp-route-name="@result.Name" class="item-with-icon">
+                                <partial name="_ItemIcon" model="new ItemIconModel(result.Name, 32)" />
+                                @result.Name
+                            </a>
+                        </li>
+                    }
+                </ul>
+                @if (Model.UsedToMake.Count > ItemModel.MaxUsedInShown)
+                {
+                    <p class="item-more">
+                        and @(Model.UsedToMake.Count - ItemModel.MaxUsedInShown) more.
+                        <a asp-page="/ReverseLookup">See what you can craft with your items</a>
+                    </p>
+                }
+            }
+            else
+            {
+                <p class="item-station">Nothing is crafted from this item.</p>
+            }
+        </section>
     </div>
-</div>
+
+    @if (!string.IsNullOrWhiteSpace(item.SourceUrl))
+    {
+        <p class="item-source">
+            Source: <a href="@item.SourceUrl">Don't Starve Wiki</a>,
+            licensed under <a href="https://creativecommons.org/licenses/by-sa/3.0/">CC BY-SA 3.0</a>.
+            Item artwork © Klei Entertainment.
+        </p>
+    }
+</article>

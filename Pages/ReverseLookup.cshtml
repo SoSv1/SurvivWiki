@@ -2,133 +2,117 @@
 @model SurviveWiki.Pages.ReverseLookupModel
 @{
     ViewData["Title"] = "What can I craft?";
+    ViewData["Wide"] = true;
 }
 
-<div class="container mt-4">
-    <div class="row mb-4">
-        <div class="col-12">
-            <h2>What's in your inventory?</h2>
-            <p class="text-muted">Select the items you have, and we'll tell you what you can make.</p>
-        </div>
-    </div>
+<div class="lookup" data-lookup>
+    <aside class="lookup-pack" aria-labelledby="pack-heading">
+        <h2 id="pack-heading" class="lookup-pack-title">Your items</h2>
+        <p class="lookup-pack-hint">Tap everything you are carrying.</p>
 
-    <div class="row">
-        <!-- Left Column: Inventory Checkboxes -->
-        <div class="col-md-4 mb-4">
-            <div class="card shadow-sm">
-                <div class="card-header bg-dark text-white">
-                    <h5 class="mb-0">Your Items</h5>
+        @* A filter for this list only. It is styled unlike the wiki search in the nav bar so the two are not confused. *@
+        <div class="lookup-filter-box">
+            <label for="pack-filter">Narrow this list</label>
+            <input id="pack-filter" class="lookup-filter" type="text" placeholder="type a name, e.g. rope"
+                   autocomplete="off" data-lookup-filter />
+        </div>
+        <p class="lookup-filter-empty" data-lookup-filter-empty hidden>
+            No item in this list has that name. To look up any item, use “Search the whole wiki” at the top.
+        </p>
+
+        @foreach (var group in Model.Groups)
+        {
+            <details class="lookup-group" open="@group.Open" data-lookup-group>
+                <summary>
+                    <span>@group.Title</span>
+                    <span class="lookup-group-count">@group.Materials.Count</span>
+                </summary>
+                <div class="lookup-chips">
+                    @foreach (var material in group.Materials)
+                    {
+                        <button type="button" class="lookup-chip" aria-pressed="false"
+                                data-lookup-item="@material.Name" data-icon="@material.IconUrl">
+                            <partial name="_ItemIcon" model="new ItemIconModel(material.Name, 28)" />
+                            <span>@material.Name</span>
+                        </button>
+                    }
                 </div>
-                <div class="card-body">
-                    <form method="post">
-                        <div class="accordion" id="inventoryCategories">
-                        @{
-                            var categoryIndex = 0;
-                            var materialGroups = Model.AvailableMaterials
-                                .GroupBy(material => material.Category)
-                                .ToList();
-                            var categories = materialGroups
-                                .Where(group => group.Count() > 1)
-                                .Select(group => new { Name = group.Key, Materials = group.ToList() })
-                                .OrderBy(group => group.Name)
-                                .ToList();
-                            var singleItems = materialGroups
-                                .Where(group => group.Count() == 1)
-                                .SelectMany(group => group)
-                                .OrderBy(material => material.Name)
-                                .ToList();
-                            if (singleItems.Any())
-                            {
-                                categories.Add(new { Name = "Other", Materials = singleItems });
-                            }
-                        }
-                        @foreach (var category in categories)
-                        {
-                            var collapseId = $"inventory-category-{categoryIndex}";
-                            var hasSelectedItems = category.Materials.Any(item => Model.SelectedItemIds.Contains(item.Id));
-                            <div class="accordion-item">
-                                <h2 class="accordion-header">
-                                    <button class="accordion-button @(hasSelectedItems ? "" : "collapsed")" type="button"
-                                            data-bs-toggle="collapse" data-bs-target="#@collapseId"
-                                            aria-expanded="@(hasSelectedItems ? "true" : "false")" aria-controls="@collapseId">
-                                        @category.Name <span class="badge text-bg-secondary ms-2">@category.Materials.Count</span>
-                                    </button>
-                                </h2>
-                                <div id="@collapseId" class="accordion-collapse collapse @(hasSelectedItems ? "show" : "")"
-                                     data-bs-parent="#inventoryCategories">
-                                    <div class="accordion-body">
-                                    @foreach (var material in category.Materials)
-                                    {
-                                        <div class="form-check mb-2">
-                                            <input class="form-check-input" type="checkbox"
-                                                   name="SelectedItemIds"
-                                                   value="@material.Id"
-                                                   id="item_@material.Id"
-                                                   @(Model.SelectedItemIds.Contains(material.Id) ? "checked" : "")>
-                                            <label class="form-check-label user-select-none item-with-icon" for="item_@material.Id">
-                                                <partial name="_ItemIcon" model="new ItemIconModel(material.Name, 28)" />
-                                                @material.Name
-                                            </label>
-                                        </div>
-                                    }
-                                    </div>
-                                </div>
-                            </div>
-                            categoryIndex++;
-                        }
-                        </div>
-                        <button type="submit" class="btn btn-primary w-100 mt-3">Find Recipes</button>
-                    </form>
-                </div>
-            </div>
+            </details>
+        }
+    </aside>
+
+    <section class="lookup-results" aria-labelledby="lookup-heading">
+        <header class="lookup-header">
+            <h1 id="lookup-heading">What can I craft?</h1>
+            <p class="lookup-status" aria-live="polite" data-lookup-status>Pick your items on the left to see what you can make.</p>
+        </header>
+
+        <div class="lookup-selected" data-lookup-selected hidden>
+            <span class="lookup-selected-label">IN YOUR PACK</span>
+            <div class="lookup-selected-chips" data-lookup-selected-chips></div>
+            <button type="button" class="lookup-clear" data-lookup-clear>Clear all</button>
         </div>
 
-        <!-- Right Column: Results -->
-        <div class="col-md-8">
-            @if (Model.HasSearched)
-            {
-                <h4 class="mb-3">You can craft:</h4>
-                
-                @if (Model.CraftableItems.Any())
-                {
-                    <div class="row row-cols-1 row-cols-md-2 g-3">
-                        @foreach (var item in Model.CraftableItems)
-                        {
-                            <div class="col">
-                                <div class="card h-100 border-success shadow-sm">
-                                    <div class="card-body">
-                                        <h5 class="card-title text-success">
-                                            <a asp-page="/Item" asp-route-name="@item.Name" class="item-with-icon text-decoration-none text-success">
-                                                <partial name="_ItemIcon" model="new ItemIconModel(item.Name, 40)" />
-                                                @item.Name
-                                            </a>
-                                        </h5>
-                                        <p class="card-text small">@item.Description</p>
-                                        
-                                        <hr />
-                                        <p class="mb-1 fw-bold small text-muted">Requires:</p>
-                                        <ul class="list-unstyled small mb-0">
-                                            @foreach (var ingredient in item.CraftedFrom)
-                                            {
-                                                <li class="item-with-icon d-flex mb-1">
-                                                    <partial name="_ItemIcon" model="new ItemIconModel(ingredient.IngredientItem.Name, 24)" />
-                                                    @ingredient.IngredientItem.Name (x @ingredient.QuantityRequired)
-                                                </li>
-                                            }
-                                        </ul>
-                                    </div>
-                                </div>
-                            </div>
-                        }
-                    </div>
-                }
-                else
-                {
-                    <div class="alert alert-secondary">
-                        You don't have enough materials to craft anything yet. Try gathering more items!
-                    </div>
-                }
-            }
+        <div class="lookup-empty" data-lookup-empty>
+            <p class="lookup-empty-title">How this page works</p>
+            <ol class="lookup-how">
+                <li>
+                    <span class="lookup-how-art">
+                        <partial name="_ItemIcon" model='new ItemIconModel("Twigs", 56)' />
+                        <partial name="_ItemIcon" model='new ItemIconModel("Flint", 56)' />
+                    </span>
+                    <span class="lookup-how-number">1</span>
+                    <strong>Tap what you carry</strong>
+                    <span class="lookup-how-text">Pick your items in the list on the left.</span>
+                </li>
+                <li>
+                    <span class="lookup-how-art">
+                        <partial name="_ItemIcon" model='new ItemIconModel("Axe", 72)' />
+                    </span>
+                    <span class="lookup-how-number">2</span>
+                    <strong>See what you can make</strong>
+                    <span class="lookup-how-text">Recipes show up here right away.</span>
+                </li>
+                <li>
+                    <span class="lookup-how-art lookup-how-art-missing">
+                        <partial name="_ItemIcon" model='new ItemIconModel("Rope", 56)' />
+                        <span class="lookup-how-plus" aria-hidden="true">?</span>
+                    </span>
+                    <span class="lookup-how-number">3</span>
+                    <strong>Spot what is missing</strong>
+                    <span class="lookup-how-text">You also see recipes that are one item short.</span>
+                </li>
+            </ol>
+            <p class="lookup-how-try">Just started a new world?</p>
+            <button type="button" class="btn btn-primary" data-lookup-starter="Twigs|Cut Grass|Flint">
+                Try it: I have Twigs, Cut Grass and Flint
+            </button>
         </div>
-    </div>
+
+        <div data-lookup-ready hidden>
+            <h2 class="lookup-section-title">
+                You can craft now <span class="lookup-section-count" data-lookup-ready-count>0</span>
+            </h2>
+            <p class="lookup-section-note">You have every ingredient. Check that you have enough of each.</p>
+            <div class="lookup-cards" data-lookup-ready-cards></div>
+        </div>
+
+        <div data-lookup-almost hidden>
+            <h2 class="lookup-section-title">
+                One item short <span class="lookup-section-count" data-lookup-almost-count>0</span>
+            </h2>
+            <p class="lookup-section-note">Find the missing ingredient and these open up too.</p>
+            <div class="lookup-cards" data-lookup-almost-cards></div>
+        </div>
+
+        <noscript>
+            <p class="alert alert-warning">This tool needs JavaScript. You can still <a asp-page="/Search">search for an item</a>.</p>
+        </noscript>
+    </section>
 </div>
+
+<script type="application/json" id="lookup-recipes">@Html.Raw(Model.RecipesJson)</script>
+
+@section Scripts {
+    <script src="~/js/reverse-lookup.js" asp-append-version="true"></script>
+}

@@ -2,16 +2,30 @@
 @model SurviveWiki.Pages.GuideModel
 @{
     ViewData["Title"] = "The First 5 Days";
+
+    // The road is one SVG path, drawn from the bottom (start) to the top (day 5).
+    // Each day's flag stands on one of the path's anchor points, in a 400 x 600 box.
+    const string road = "M200,590 C262,572 300,548 285,505 S140,452 120,400 S300,350 290,295 S130,245 115,190 S228,140 250,85";
+    var flagPoints = new (int X, int Y)[] { (285, 505), (120, 400), (290, 295), (115, 190), (250, 85) };
 }
 
-<div class="guide-page" data-guide>
-    <header class="guide-header">
-        <p class="guide-eyebrow">BEGINNER PLAN</p>
-        <h1>The First 5 Days</h1>
-        <p class="guide-lead">
-            Do these in order and tick each one off as you finish it in the game.
-            Your progress is saved on this device.
-        </p>
+<div class="trail-page" data-guide>
+    <header class="trail-header">
+        <div>
+            <p class="trail-eyebrow">BEGINNER PLAN</p>
+            <h1>The First 5 Days</h1>
+            <p class="trail-lead">Follow the road. Tap a flag to see that day's jobs, and tick them off as you do them in the game.</p>
+        </div>
+
+        @if (Model.Days.Any())
+        {
+            <div class="trail-score" aria-live="polite">
+                <p class="trail-score-days"><span data-guide-days-done>0</span><span class="trail-score-of">/ @Model.Days.Count</span></p>
+                <p class="trail-score-label">days survived</p>
+                <p class="trail-score-steps" data-guide-text>0 of @Model.TotalSteps jobs done</p>
+                <button type="button" class="trail-reset" data-guide-reset hidden>Start over</button>
+            </div>
+        }
     </header>
 
     @if (!Model.Days.Any())
@@ -24,60 +38,105 @@
     }
     else
     {
-        <section class="guide-status" aria-label="Your progress">
-            <div class="guide-progress" role="progressbar" aria-label="Plan progress"
-                 aria-valuemin="0" aria-valuemax="@Model.TotalSteps" aria-valuenow="0" data-guide-bar>
-                <span class="guide-progress-fill" data-guide-fill></span>
-            </div>
-            <div class="guide-status-row">
-                <p class="guide-progress-text" aria-live="polite" data-guide-text>
-                    0% complete · 0 of @Model.TotalSteps steps
-                </p>
-                <button type="button" class="guide-reset" data-guide-reset hidden>Start over</button>
-            </div>
-            <p class="guide-next" data-guide-next hidden>
-                <span class="guide-next-label">UP NEXT</span>
-                <a href="#" data-guide-next-link></a>
-            </p>
-            <p class="guide-notice" data-guide-storage-warning hidden>
-                This browser is blocking saved data, so your ticks will be lost when you close the page.
-            </p>
-            <noscript>
-                <p class="guide-notice">Turn on JavaScript to save your progress between sessions.</p>
-            </noscript>
-        </section>
-
-        <div class="guide-days">
-            @foreach (var day in Model.Days)
-            {
-                <details class="guide-day" id="day-@day.Number" data-guide-day="@day.Number">
-                    <summary>
-                        <span class="guide-day-name">Day @day.Number</span>
-                        <span class="guide-day-theme">@day.Theme</span>
-                        <span class="guide-day-count" data-guide-day-count>0 / @day.Steps.Count</span>
-                    </summary>
-                    <ol class="guide-steps">
-                        @foreach (var step in day.Steps)
-                        {
-                            <li class="guide-step" id="step-@step.Id">
-                                <input type="checkbox" id="step-check-@step.Id" data-guide-step="@step.Id"
-                                       data-guide-title="@step.Title" autocomplete="off" />
-                                <div class="guide-step-body">
-                                    <label for="step-check-@step.Id">@step.Title</label>
-                                    @* Kept on one line: line breaks here would add a space before punctuation that follows a link. *@
-                                    <p>@foreach (var segment in step.Instructions) { if (segment.ItemName is null) {<text>@segment.Text</text>} else {<a class="guide-item-link" asp-page="/Item" asp-route-name="@segment.ItemName"><partial name="_ItemIcon" model="new ItemIconModel(segment.ItemName, 22)" />@segment.Text</a>} }</p>
-                                </div>
-                            </li>
-                        }
-                    </ol>
-                </details>
-            }
-        </div>
-
-        <p class="guide-finished" data-guide-finished hidden>
-            You made it through the first five days. From here,
-            <a asp-page="/ReverseLookup">see what else you can craft</a>.
+        <p class="trail-notice" data-guide-storage-warning hidden>
+            This browser is blocking saved data, so your ticks will be lost when you close the page.
         </p>
+        <noscript>
+            <p class="trail-notice">Turn on JavaScript to use the map and save your progress. All five days are listed below.</p>
+            <style>.trail-day[hidden] { display: block !important; } .trail-map { display: none; }</style>
+        </noscript>
+
+        <div class="trail-layout">
+            <div class="trail-map" aria-label="Your road through the first five days">
+                <svg viewBox="0 0 400 600" preserveAspectRatio="xMidYMid meet" aria-hidden="true" focusable="false">
+                    <path class="trail-road-edge" d="@road" />
+                    <path class="trail-road" d="@road" data-guide-road />
+                    <path class="trail-road-walked" d="@road" data-guide-walked />
+                    <path class="trail-road-dashes" d="@road" />
+                    <g class="trail-start">
+                        <circle cx="200" cy="590" r="9" />
+                        <text x="200" y="574" text-anchor="middle">START</text>
+                    </g>
+                    <circle class="trail-you-pulse" r="13" cx="200" cy="590" data-guide-pulse />
+                    <circle class="trail-you" r="7" cx="200" cy="590" data-guide-you />
+                </svg>
+
+                @for (var i = 0; i < Model.Days.Count && i < flagPoints.Length; i++)
+                {
+                    var day = Model.Days[i];
+                    var point = flagPoints[i];
+                    <button type="button" class="trail-flag @(point.X > 200 ? "is-flipped" : "")"
+                            style="left: @(point.X / 4.0)%; top: @(point.Y / 6.0)%"
+                            data-guide-flag="@day.Number" data-x="@point.X" data-y="@point.Y"
+                            aria-controls="day-@day.Number" aria-expanded="false">
+                        <svg class="trail-flag-art" viewBox="0 0 54 66" width="54" height="66" aria-hidden="true" focusable="false">
+                            <line class="trail-flag-pole" x1="8" y1="5" x2="8" y2="64" />
+                            <path class="trail-flag-cloth" d="M8,7 L50,13 L40,23 L50,34 L8,39 Z" />
+                            <text class="trail-flag-number" x="25" y="29" text-anchor="middle">@day.Number</text>
+                            <path class="trail-flag-check" d="M17,23 L23,29 L34,16" />
+                        </svg>
+                        <span class="trail-flag-label">
+                            <span class="trail-flag-day">Day @day.Number</span>
+                            <span class="trail-flag-count" data-guide-flag-count>0/@day.Steps.Count</span>
+                        </span>
+                        <span class="visually-hidden">: @day.Theme</span>
+                    </button>
+                }
+            </div>
+
+            <div class="trail-panels">
+                @for (var i = 0; i < Model.Days.Count; i++)
+                {
+                    var day = Model.Days[i];
+                    var next = i + 1 < Model.Days.Count ? Model.Days[i + 1] : null;
+                    <section class="trail-day" id="day-@day.Number" data-guide-day="@day.Number" tabindex="-1" hidden
+                             aria-labelledby="day-@day.Number-title">
+                        <header class="trail-day-header">
+                            <p class="trail-day-kicker">DAY @day.Number</p>
+                            <h2 id="day-@day.Number-title">@day.Theme</h2>
+                            <div class="trail-day-progress">
+                                <span class="trail-pips" aria-hidden="true">
+                                    @foreach (var step in day.Steps)
+                                    {
+                                        <span data-guide-pip></span>
+                                    }
+                                </span>
+                                <span class="trail-day-count" data-guide-day-count>0 of @day.Steps.Count done</span>
+                            </div>
+                        </header>
+
+                        <ol class="trail-steps">
+                            @foreach (var step in day.Steps)
+                            {
+                                <li class="trail-step" id="step-@step.Id">
+                                    <input type="checkbox" id="step-check-@step.Id" data-guide-step="@step.Id" autocomplete="off" />
+                                    <div class="trail-step-body">
+                                        <label for="step-check-@step.Id">@step.Title</label>
+                                        @* Kept on one line: line breaks here would add a space before punctuation that follows a link. *@
+                                        <p>@foreach (var segment in step.Instructions) { if (segment.ItemName is null) {<text>@segment.Text</text>} else {<a class="guide-item-link" asp-page="/Item" asp-route-name="@segment.ItemName"><partial name="_ItemIcon" model="new ItemIconModel(segment.ItemName, 22)" />@segment.Text</a>} }</p>
+                                    </div>
+                                </li>
+                            }
+                        </ol>
+
+                        <div class="trail-day-done" data-guide-day-done hidden>
+                            <p class="trail-day-done-title">Day @day.Number survived!</p>
+                            @if (next is not null)
+                            {
+                                <button type="button" class="trail-next" data-guide-go="@next.Number">On to Day @next.Number →</button>
+                            }
+                            else
+                            {
+                                <p class="trail-day-done-text">
+                                    You made it through the first five days. From here,
+                                    <a asp-page="/ReverseLookup">see what else you can craft</a>.
+                                </p>
+                            }
+                        </div>
+                    </section>
+                }
+            </div>
+        </div>
     }
 </div>
 

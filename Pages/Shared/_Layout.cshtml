@@ -11,6 +11,10 @@
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
 </head>
 
+@{
+    // Used to highlight the page the player is on in the nav bar.
+    var currentPage = ViewContext.RouteData.Values["page"] as string;
+}
 <body>
     <header>
         <nav class="wiki-nav navbar navbar-expand-lg navbar-toggleable-lg navbar-light bg-white border-bottom box-shadow mb-3">
@@ -23,20 +27,20 @@
                 <div class="navbar-collapse collapse d-lg-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-page="/Index">Home</a>
+                            <a class="nav-link text-dark @(currentPage == "/Index" ? "is-active" : "")" asp-area="" asp-page="/Index">Home</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-page="/ReverseLookup">Reverse
+                            <a class="nav-link text-dark @(currentPage == "/ReverseLookup" ? "is-active" : "")" asp-area="" asp-page="/ReverseLookup">Reverse
                                 Lookup</a>
                             </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-page="/Guide">First 5 Days</a>
+                            <a class="nav-link text-dark @(currentPage == "/Guide" ? "is-active" : "")" asp-area="" asp-page="/Guide">First 5 Days</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-page="/Contribute">Add a page</a>
+                            <a class="nav-link text-dark @(currentPage == "/Contribute" ? "is-active" : "")" asp-area="" asp-page="/Contribute">Add a page</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-page="/Review">Review queue</a>
+                            <a class="nav-link text-dark @(currentPage == "/Review" ? "is-active" : "")" asp-area="" asp-page="/Review">Review queue</a>
                         </li>
                         </ul>
                         <!-- You can add more nav links here later -->
@@ -44,16 +48,16 @@
                         <!-- NEW: Search Bar Form -->
                         <form class="d-flex" method="get" asp-page="/Search">
                             <!-- The name="query" attribute must match the BindProperty in Search.cshtml.cs -->
-                            <input class="form-control me-2" type="search" name="query" placeholder="Find items..."
-                                   aria-label="Search">
-                            <button class="btn btn-outline-primary" type="submit">Search</button>
+                            <input class="form-control me-2" type="search" name="query" placeholder="Search the whole wiki…"
+                                   aria-label="Search the whole wiki">
+                            <button class="btn btn-outline-primary wiki-nav-go" type="submit" aria-label="Search the whole wiki" title="Search the whole wiki">&#x2315;</button>
                         </form>
             
                     </div>
                 </div>
             </nav>
         </header>
-        <div class="container">
+        <div class="@(ViewData["Wide"] is true ? "container-fluid wiki-wide" : "container")">
             <main role="main" class="wiki-main pb-3">
                 @RenderBody()
             </main>
